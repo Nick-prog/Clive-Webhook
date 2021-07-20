@@ -30,7 +30,7 @@ The main purpose of this program was to utilize a webhook connection on an onlin
 
 **Disclaimer: The user must relaunch the program to receive up-to-date information on the table discussed above.**
 
-* Finally, the box located on the **bottom right** indicates the storage location the user wishes to download their pulled documents to.
+* Finally, the box located on the **bottom right** titled **Storage Location?** indicates the storage location the user wishes to download their pulled documents to.
 
 All user inputs can be viewed on the labels below the progress bar before pulling. Once pulled, the delete button will become active allowing the user to remove the pulled documents from the pipedream webhook website. As of right now, this program can only pull and delete 100 documents at a time.
 
