@@ -81,7 +81,7 @@ A Python 3.9 environment was used to create and run this program, but anything u
  * Program will crash if a similar file name currently exists in the storage location.
   
 # Contact
-Nickolas Rodriguez | Twitter: @_Nick_Rod_ | Email: Nickolasrodriguez98@gmail.com | GitHub: Nick-prog
+Nickolas Rodriguez | Twitter: @\_Nick_Rod_ | Email: Nickolasrodriguez98@gmail.com | GitHub: Nick-prog
 
 # Acknowledgements
 * [Pipedream](https://www.pipedream.com/)
