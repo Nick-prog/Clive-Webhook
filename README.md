@@ -70,10 +70,13 @@ A Python 3.9 environment was used to create and run this program, but anything u
  * Added a mininize feature and fixed window sizes.
  * Added images to the Dialog box and the "Refresh" button.
  
- ## Reported Bugs
+ ## Reported/Known Bugs
  All reported bugs may be caused from similar instead of seperate instances.
+ **Version 1.1**
  * When downloading to a large share drive, potential temporary freezing may occur.
  * Delete request very rarely skip items that have been just pulled.
+ **Version 1.0**
+ * Program will crash if a similar file name currently exists in the storage location.
   
 # Contact
 Nickolas Rodriguez | Twitter: @_Nick_Rod_ | Email: Nickolasrodriguez98@gmail.com | GitHub: Nick-prog
