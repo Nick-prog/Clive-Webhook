@@ -17,7 +17,7 @@ The main purpose of this program was to utilize a webhook connection on an onlin
 <br />
  <p align="center">
   <a href="https://github.com/Nick-Prog/Clive-Webhook">
-    <img src="images/Clive-Webhook.png" alt="Logo" width="700" height="500">
+    <img src="images/Clive-Webhook-1.1.png" alt="Logo" width="700" height="500">
   </a>
    </p>
 </p>
@@ -58,10 +58,24 @@ A Python 3.9 environment was used to create and run this program, but anything u
   </p>
 </p>
  
-## Change Log
+# Change Log
+ **Version 1.1**
+ * Added a "Refresh" push button to the **top left** of the real time information table.
+ * Improved load times and added a sleep thread to prevent multiple miss-inputs.
+ * Included an autmoated storage location setter for the TAMUK purposes.
+ * Fixed problems with the real time information table (i.e. Date, Time, and Last weren't updating properly)
+ * Removed the disable feature from the other options under Department and added their funcitonality.
+ * Delete button now only removes the entries pulled at that time.
+ * Added extra labels to the right of the "Pull" push button to better display the current state of the program.
+ * Added a mininize feature and fixed window sizes
+ 
+ ## Reported Bugs
+ All reported bugs may be caused from similar instead of seperate instances.
+ * When downloading to a large share drive, potential temporary freezing may occur.
+ * Delete request very rarely skip items that have been just pulled.
   
 # Contact
-Nickolas Rodriguez | Twitter: @Nick_Rod | Email: Nickolasrodriguez98@gmail.com | GitHub: Nick-prog
+Nickolas Rodriguez | Twitter: @_Nick_Rod_ | Email: Nickolasrodriguez98@gmail.com | GitHub: Nick-prog
 
 # Acknowledgements
 * [Pipedream](https://www.pipedream.com/)
