@@ -1,36 +1,42 @@
-import http.client, Webhook, json
+import http.client, Webhook
 
 def id():
     conn = http.client.HTTPSConnection('api.pipedream.com')
-    conn.request("GET", '/v1/sources/dc_RWuzvge/event_summaries', '', {
-        'Authorization': 'Bearer 36177d2bb78cbd5b4eacc90577ccc2d5'})
+    conn.request("GET", '/v1/sources/<webhook>/event_summaries', '', {
+        'Authorization': 'Bearer <api_key>'})
     res = conn.getresponse()
     data = res.read().decode("utf-8")
     return data
 
 def get():
     conn = http.client.HTTPSConnection('api.pipedream.com')
-    conn.request("GET", '/v1/sources/dc_RWuzvge/event_summaries?expand=event', '', {
-        'Authorization': 'Bearer 36177d2bb78cbd5b4eacc90577ccc2d5'})
+    conn.request("GET", '/v1/sources/<webhook>/event_summaries?expand=event', '', {
+        'Authorization': 'Bearer <api_key>'})
     res = conn.getresponse()
     data = res.read().decode("utf-8")
     return data
 
 def delete():
-    Data = Webhook.id()
-    total = Webhook.total()
-    dict = json.loads(Data)
-    list = dict["data"]
-    if(total > 100):
-        index = total - 100
-        end = list[index].get('id')
-    elif(total != 0):
-        end = list[0].get('id')
-    else:
-        end = 0
+    dept_id = {}
+    dept_id = Webhook.current_id
 
-    if(end != 0):
+    if(len(dept_id) != 0):
+        end = dept_id[len(dept_id)-1]
+        start = dept_id[0]
+        print(end, start)
         conn = http.client.HTTPSConnection('api.pipedream.com')
-        conn.request("DELETE", '/v1/sources/dc_RWuzvge/events?end_id=%s' % end, '', {
-            'Authorization': 'Bearer 36177d2bb78cbd5b4eacc90577ccc2d5'})
-        conn.getresponse()
+        conn.request("DELETE", '/v1/sources/<webhook>/events?start_id=%s&end_id=%s' % (start, end), '', {
+        'Authorization': 'Bearer <api_key>'})
+        conn.getresponse() 
+
+def delete_current():
+    dept_id = {}
+    dept_id = Webhook.current_id
+
+    if(len(dept_id) != 0):
+        for x in range (len(dept_id)):
+            end = dept_id[x]
+            conn = http.client.HTTPSConnection('api.pipedream.com')
+            conn.request("DELETE", '/v1/sources/<webhook>/events?start_id=%s&end_id=%s' % (end, end), '', {
+            'Authorization': 'Bearer <api_key'})
+            conn.getresponse()
