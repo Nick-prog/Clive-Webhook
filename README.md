@@ -45,7 +45,7 @@ A Python 3.9 environment was used to create and run this program, but anything u
     ```sh
     git clone https://github.com/your_username/Project-Name.git
     ```
- 2. Now that you have the files on your machine, replace all <insert> and <api_key> values within the connection.py file. Your <api_key> can be found in the settings of your     account with Pipedream, without it you will be  unable to interact with the webhook link so keep it SAFE.
+ 2. Now that you have the files on your machine, replace all <webhook> and <api_key> values within the connection.py file. Your <api_key> can be found in the settings of your     account with Pipedream, without it you will be  unable to interact with the webhook link so keep it SAFE.
  3. Finally, execute the main.py file and your program  should run after a short period.
  
  **Disclaimer: This program was made SPECIFICALLY for this exact problem. Unless the JSON Snippet metadata genearted for your problem is exactly the same, you must alter most if not all of the code.**
@@ -57,6 +57,8 @@ A Python 3.9 environment was used to create and run this program, but anything u
   </a>
   </p>
 </p>
+ 
+## Change Log
   
 # Contact
 Nickolas Rodriguez | Twitter: @Nick_Rod | Email: Nickolasrodriguez98@gmail.com | GitHub: Nick-prog
