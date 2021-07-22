@@ -72,9 +72,11 @@ A Python 3.9 environment was used to create and run this program, but anything u
  
  ## Reported/Known Bugs
  All reported bugs may be caused from similar instead of seperate instances.
+ 
  **Version 1.1**
  * When downloading to a large share drive, potential temporary freezing may occur.
  * Delete request very rarely skip items that have been just pulled.
+ 
  **Version 1.0**
  * Program will crash if a similar file name currently exists in the storage location.
   
