@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'EnrollmentWebhook.ui'
+# Form implementation generated from reading ui file 'Enrollment.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.4
 #
@@ -9,17 +9,26 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5.QtGui import *
+from PyQt5.QtCore import *
 import Webhook, time
 
 critera = { 0 : "Admission", 1 : "Financial Aid", 2 : "Military and Veteran Resource Center",
-3 : "Registrar", 4 : "International Student & Scholar Services", 5 : "Other"}
+3 : "Registrar", 4 : "International Student & Scholar Services", 5 : "Other", 6 : "All"}
+
+class Thread(QtCore.QThread):
+    def run(self):
+        QtCore.QThread.sleep(7)
+
 
 class Ui_Dialog(object):
 
     def setupUi(self, Dialog):
         Dialog.setObjectName("Dialog")
-        Dialog.resize(638, 451)
+        Dialog.setFixedSize(638, 451)
         Dialog.setStyleSheet("background-color: rgb(226, 226, 226);")
+        Dialog.setWindowIcon(QIcon('Images/TAMUK Logo 3.jpg'))
+        Dialog.setWindowFlag(Qt.WindowMinimizeButtonHint, True)
 
         self.Horizontal_Line = QtWidgets.QFrame(Dialog)
         self.Horizontal_Line.setGeometry(QtCore.QRect(20, 350, 591, 20))
@@ -40,26 +49,10 @@ class Ui_Dialog(object):
         self.verticalLayout.addWidget(self.Department)
         self.Dept_List = QtWidgets.QListWidget(self.verticalLayoutWidget_2)
         self.Dept_List.setObjectName("Dept_List")
-        item = QtWidgets.QListWidgetItem()
-        item.setFlags(QtCore.Qt.ItemIsSelectable|QtCore.Qt.ItemIsDragEnabled|QtCore.Qt.ItemIsUserCheckable)
-        self.Dept_List.addItem(item)
-        item = QtWidgets.QListWidgetItem()
-        item.setFlags(QtCore.Qt.ItemIsSelectable|QtCore.Qt.ItemIsDragEnabled|QtCore.Qt.ItemIsUserCheckable)
-        self.Dept_List.addItem(item)
-        item = QtWidgets.QListWidgetItem()
-        item.setFlags(QtCore.Qt.ItemIsSelectable|QtCore.Qt.ItemIsDragEnabled|QtCore.Qt.ItemIsUserCheckable)
-        self.Dept_List.addItem(item)
-        item = QtWidgets.QListWidgetItem()
-        item.setFlags(QtCore.Qt.ItemIsSelectable|QtCore.Qt.ItemIsDragEnabled|QtCore.Qt.ItemIsUserCheckable)
-        self.Dept_List.addItem(item)
-        item = QtWidgets.QListWidgetItem()
-        item.setFlags(QtCore.Qt.ItemIsSelectable|QtCore.Qt.ItemIsDragEnabled|QtCore.Qt.ItemIsUserCheckable)
-        self.Dept_List.addItem(item)
-        item = QtWidgets.QListWidgetItem()
-        item.setFlags(QtCore.Qt.ItemIsSelectable|QtCore.Qt.ItemIsDragEnabled|QtCore.Qt.ItemIsUserCheckable)
-        self.Dept_List.addItem(item)
-        item = QtWidgets.QListWidgetItem()
-        self.Dept_List.addItem(item)
+
+        for x in range (7):
+            item = QtWidgets.QListWidgetItem()
+            self.Dept_List.addItem(item)
 
         self.verticalLayout.addWidget(self.Dept_List)
         self.progressBar = QtWidgets.QProgressBar(Dialog)
@@ -109,238 +102,148 @@ class Ui_Dialog(object):
         self.Real_Time.setColumnCount(4)
         self.Real_Time.setRowCount(6)
 
-        item = QtWidgets.QTableWidgetItem()
-        font = QtGui.QFont()
-        font.setBold(True)
-        font.setWeight(75)
-        item.setFont(font)
-        self.Real_Time.setVerticalHeaderItem(0, item)
+        for y in range(6):
+            item = QtWidgets.QTableWidgetItem()
+            font = QtGui.QFont()
+            font.setPointSize(11)
+            font.setBold(False)
+            font.setWeight(50)
+            item.setFont(font)
+            self.Real_Time.setVerticalHeaderItem(y, item)
 
-        item = QtWidgets.QTableWidgetItem()
-        font = QtGui.QFont()
-        font.setBold(True)
-        font.setWeight(75)
-        item.setFont(font)
-        self.Real_Time.setVerticalHeaderItem(1, item)
+        for x in range(4):
+            item = QtWidgets.QTableWidgetItem()
+            font = QtGui.QFont()
+            font.setPointSize(11)
+            font.setBold(False)
+            font.setWeight(50)
+            item.setFont(font)
+            self.Real_Time.setHorizontalHeaderItem(x, item)
 
-        item = QtWidgets.QTableWidgetItem()
-        font = QtGui.QFont()
-        font.setBold(True)
-        font.setWeight(75)
-        item.setFont(font)
-        self.Real_Time.setVerticalHeaderItem(2, item)
-
-        item = QtWidgets.QTableWidgetItem()
-        font = QtGui.QFont()
-        font.setBold(True)
-        font.setWeight(75)
-        item.setFont(font)
-        self.Real_Time.setVerticalHeaderItem(3, item)
-
-        item = QtWidgets.QTableWidgetItem()
-        font = QtGui.QFont()
-        font.setBold(True)
-        font.setWeight(75)
-        item.setFont(font)
-        self.Real_Time.setVerticalHeaderItem(4, item)
-
-        item = QtWidgets.QTableWidgetItem()
-        font = QtGui.QFont()
-        font.setBold(True)
-        font.setWeight(75)
-        item.setFont(font)
-        self.Real_Time.setVerticalHeaderItem(5, item)
-
-        item = QtWidgets.QTableWidgetItem()
-        font = QtGui.QFont()
-        font.setPointSize(9)
-        font.setBold(True)
-        font.setWeight(75)
-        item.setFont(font)
-        self.Real_Time.setHorizontalHeaderItem(0, item)
-
-        item = QtWidgets.QTableWidgetItem()
-        font = QtGui.QFont()
-        font.setPointSize(9)
-        font.setBold(True)
-        font.setWeight(75)
-        item.setFont(font)
-        self.Real_Time.setHorizontalHeaderItem(1, item)
-
-        item = QtWidgets.QTableWidgetItem()
-        font = QtGui.QFont()
-        font.setPointSize(9)
-        font.setBold(True)
-        font.setWeight(75)
-        item.setFont(font)
-        self.Real_Time.setHorizontalHeaderItem(2, item)
-
-        item = QtWidgets.QTableWidgetItem()
-        font = QtGui.QFont()
-        font.setBold(True)
-        font.setWeight(75)
-        item.setFont(font)
-        self.Real_Time.setHorizontalHeaderItem(3, item)
-
-        item = QtWidgets.QTableWidgetItem()
-        font = QtGui.QFont()
-        font.setPointSize(9)
-        font.setBold(False)
-        font.setItalic(True)
-        font.setWeight(50)
-        item.setFont(font)
-        self.Real_Time.setItem(0, 0, item)
-        item = QtWidgets.QTableWidgetItem()
-        self.Real_Time.setItem(0, 1, item)
-        item = QtWidgets.QTableWidgetItem()
-        self.Real_Time.setItem(0, 2, item)
-        item = QtWidgets.QTableWidgetItem()
-        self.Real_Time.setItem(0, 3, item)
-
-        item = QtWidgets.QTableWidgetItem()
-        font = QtGui.QFont()
-        font.setBold(False)
-        font.setItalic(True)
-        font.setWeight(50)
-        item.setFont(font)
-        self.Real_Time.setItem(1, 0, item)
-        item = QtWidgets.QTableWidgetItem()
-        self.Real_Time.setItem(1, 1, item)
-        item = QtWidgets.QTableWidgetItem()
-        self.Real_Time.setItem(1, 2, item)
-        item = QtWidgets.QTableWidgetItem()
-        self.Real_Time.setItem(1, 3, item)
-
-        item = QtWidgets.QTableWidgetItem()
-        font = QtGui.QFont()
-        font.setItalic(True)
-        item.setFont(font)
-        self.Real_Time.setItem(2, 0, item)
-        item = QtWidgets.QTableWidgetItem()
-        self.Real_Time.setItem(2, 1, item)
-        item = QtWidgets.QTableWidgetItem()
-        self.Real_Time.setItem(2, 2, item)
-        item = QtWidgets.QTableWidgetItem()
-        self.Real_Time.setItem(2, 3, item)
-
-        item = QtWidgets.QTableWidgetItem()
-        font = QtGui.QFont()
-        font.setItalic(True)
-        item.setFont(font)
-        self.Real_Time.setItem(3, 0, item)
-        item = QtWidgets.QTableWidgetItem()
-        self.Real_Time.setItem(3, 1, item)
-        item = QtWidgets.QTableWidgetItem()
-        self.Real_Time.setItem(3, 2, item)
-        item = QtWidgets.QTableWidgetItem()
-        self.Real_Time.setItem(3, 3, item)
-
-        item = QtWidgets.QTableWidgetItem()
-        font = QtGui.QFont()
-        font.setBold(False)
-        font.setItalic(True)
-        font.setWeight(50)
-        item.setFont(font)
-        self.Real_Time.setItem(4, 0, item)
-        item = QtWidgets.QTableWidgetItem()
-        self.Real_Time.setItem(4, 1, item)
-        item = QtWidgets.QTableWidgetItem()
-        self.Real_Time.setItem(4, 2, item)
-        item = QtWidgets.QTableWidgetItem()
-        self.Real_Time.setItem(4, 3, item)
-        
-        item = QtWidgets.QTableWidgetItem()
-        font = QtGui.QFont()
-        font.setBold(False)
-        font.setItalic(True)
-        font.setWeight(50)
-        item.setFont(font)
-        self.Real_Time.setItem(5, 0, item)
-        item = QtWidgets.QTableWidgetItem()
-        self.Real_Time.setItem(5, 1, item)
-        item = QtWidgets.QTableWidgetItem()
-        self.Real_Time.setItem(5, 2, item)
-        item = QtWidgets.QTableWidgetItem()
-        self.Real_Time.setItem(5, 3, item)
+        for x in range(6):
+            for y in range(4):
+                item = QtWidgets.QTableWidgetItem()
+                font = QtGui.QFont()
+                font.setItalic(True)
+                item.setFont(font)
+                self.Real_Time.setItem(x, y, item)
+                item.setFlags(Qt.ItemIsEditable)
 
         self.Storage_Current = QtWidgets.QLabel(Dialog)
         self.Storage_Current.setGeometry(QtCore.QRect(40, 400, 331, 20))
         self.Storage_Current.setObjectName("Storage_Current")
-
         self.Dept_Current = QtWidgets.QLabel(Dialog)
         self.Dept_Current.setGeometry(QtCore.QRect(40, 420, 331, 16))
         self.Dept_Current.setObjectName("Dept_Current")
-
+        self.Refresh = QtWidgets.QPushButton(Dialog)
+        self.Refresh.setGeometry(QtCore.QRect(320, 30, 31, 31))
+        self.Refresh.setIcon(QIcon('Images/refresh-image.png'))
+        self.Refresh.setText("")
+        self.Refresh.setObjectName("Refresh")
         self.Current_Status = QtWidgets.QLabel(Dialog)
         self.Current_Status.setGeometry(QtCore.QRect(580, 410, 120, 23))
         self.Current_Status.setObjectName("Current_Status")
         self.Current_Status.setText("Waiting...")
-
         self.retranslateUi(Dialog)
         self.Storage_Input.textChanged['QString'].connect(self.Storage_Current.setText)
         self.Dept_List.currentTextChanged['QString'].connect(self.Dept_Current.setText)
+
         self.Pull.clicked.connect(self.on_click)
+        self.Pull_Thread = Thread()
+        self.Pull_Thread.finished.connect(lambda: self.Pull.setEnabled(True))
         self.Delete.clicked.connect(self.on_delete)
+        self.Delete_Thread = Thread()
+        self.Delete_Thread.finished.connect(lambda: self.Delete.setEnabled(False))
+        self.Refresh.clicked.connect(self.on_refresh)
+        self.Refresh_Thread = Thread()
+        self.Refresh_Thread.finished.connect(lambda: self.Refresh.setEnabled(True))
 
         QtCore.QMetaObject.connectSlotsByName(Dialog)
 
     def on_click(self):
-        self.Current_Status.setText("")
-        location = self.Storage_Input.text()
-        department = self.Dept_List.currentItem()
-        for i in range(101):
-            time.sleep(0.05)
-            self.progressBar.setValue(i)
-        self.Current_Status.setText("Pulled!")
-        self.progressBar.setValue(0)
-        Webhook.download(department.text(),location)
-        self.Delete.setEnabled(True)
+        if not self.Pull_Thread.isRunning():
+            self.Pull.setEnabled(False)
+            self.Refresh.setEnabled(False)
+            self.Current_Status.setText("Loading...")
+            self.Pull_Thread.start()
+            location = self.Storage_Input.text()
+            department = self.Dept_List.currentItem()
+            for i in range(101):
+                time.sleep(0.05)
+                self.progressBar.setValue(i)
+            self.Current_Status.setText("Pulled!")
+            self.progressBar.setValue(0)
+            Webhook.download(department.text(),location)
+            self.Delete.setEnabled(True)
+            self.Refresh.setEnabled(True)
 
     def on_delete(self):
-        self.Current_Status.setText("")
-        for i in range(101):
-            time.sleep(0.05)
-            self.progressBar.setValue(i)
-        self.Current_Status.setText("Deleted!")
-        self.progressBar.setValue(0)
-        Webhook.delete()
-        self.Delete.setEnabled(False)
+        if not self.Delete_Thread.isRunning():
+            self.Delete.setEnabled(False)
+            self.Current_Status.setText("Loading...")
+            self.Delete_Thread.start()
+            for i in range(101):
+                time.sleep(0.05)
+                self.progressBar.setValue(i)
+            self.Current_Status.setText("Deleted!")
+            self.progressBar.setValue(0)
+            department = self.Dept_List.currentItem()
+            if(department == "All"):
+                Webhook.delete()
+            else:
+                Webhook.delete_current()
+
+    def on_refresh(self):
+        if not self.Refresh_Thread.isRunning():
+            self.Refresh.setEnabled(False)
+            self.Pull.setEnabled(False)
+            self.Current_Status.setText("Loading...")
+            self.Refresh_Thread.start()
+            for i in range(101):
+                    time.sleep(0.02)
+                    self.progressBar.setValue(i)
+            self.Current_Status.setText("Refreshed!")
+            _translate = QtCore.QCoreApplication.translate
+            for y in range(6):
+                item = self.Real_Time.item(y, 0)
+                total = Webhook.entries(f"{critera[y]}")
+                item.setText(_translate("Dialog", f"{total}"))
+                item = self.Real_Time.item(y, 1)
+                date = Webhook.date(f"{critera[y]}")
+                item.setText(_translate("Dialog", f"{date}"))
+                item = self.Real_Time.item(y, 2)
+                current = Webhook.current(f"{critera[y]}")
+                item.setText(_translate("Dialog", f"{current}"))
+                item = self.Real_Time.item(y, 3)
+                last = Webhook.last()
+                item.setText(_translate("Dialog", f"{last}"))
+            self.progressBar.setValue(0)
+            self.Pull.setEnabled(True)
 
     def retranslateUi(self, Dialog):
         _translate = QtCore.QCoreApplication.translate
         Dialog.setWindowTitle(_translate("Dialog", "Uploaded Documents Webhook"))
-
         self.Department.setText(_translate("Dialog", "<html><head/><body><p align=\"center\"><span style=\" font-size:9pt; font-weight:600;\">Department?</span></p></body></html>"))
         self.Dept_List.setWhatsThis(_translate("Dialog", "<html><head/><body><p><span style=\" font-weight:600; font-style:italic;\">Tip:</span><span style=\" font-style:italic;\"> This dialogue box is used to determine what department the user wishes to pull and store data from...</span></p></body></html>"))
         __sortingEnabled = self.Dept_List.isSortingEnabled()
         self.Dept_List.setSortingEnabled(False)
-        item = self.Dept_List.item(0)
-        item.setText(_translate("Dialog", "Admission"))
-        item = self.Dept_List.item(1)
-        item.setText(_translate("Dialog", "Financial Aid"))
-        item = self.Dept_List.item(2)
-        item.setText(_translate("Dialog", "Miltary and Veteran Resource Center"))
-        item = self.Dept_List.item(3)
-        item.setText(_translate("Dialog", "Registrar"))
-        item = self.Dept_List.item(4)
-        item.setText(_translate("Dialog", "International Student & Scholar Services"))
-        item = self.Dept_List.item(5)
-        item.setText(_translate("Dialog", "Other"))
-        item = self.Dept_List.item(6)
-        item.setText(_translate("Dialog", "All"))
+
+        for x in range(7):
+            item = self.Dept_List.item(x)
+            item.setText(_translate("Dialog", f"{critera[x]}"))
+
         self.Dept_List.setSortingEnabled(__sortingEnabled)
-
         self.Pull.setText(_translate("Dialog", "Pull"))
-
         self.Delete.setText(_translate("Dialog", "Delete"))
-
         self.verticalLayoutWidget.setWhatsThis(_translate("Dialog", "<html><head/><body><p><span style=\" font-weight:600; font-style:italic;\">Tip:</span><span style=\" font-style:italic;\">  This dialogue box specifies the location the user wishes to store the downloaded files... </span>(Ex: C:\\Users\\KUNRR004\\Desktop)</p></body></html>"))
-        
         self.Storage.setWhatsThis(_translate("Dialog", "<html><head/><body><p><span style=\" font-weight:600; font-style:italic;\">Tip:</span><span style=\" font-style:italic;\">  This dialogue box specifies the location the user wishes to store the downloaded files... </span>(Ex: C:\\Users\\KUNRR004\\Desktop)</p></body></html>"))
         self.Storage.setText(_translate("Dialog", "<html><head/><body><p align=\"center\"><span style=\" font-size:9pt; font-weight:600;\">Storage Location?</span></p></body></html>"))
-        
         self.Storage_Input.setWhatsThis(_translate("Dialog", "<html><head/><body><p><span style=\" font-weight:600; font-style:italic;\">Tip:</span><span style=\" font-style:italic;\">  This dialogue box specifies the location the user wishes to store the downloaded files... </span>(Ex: C:\\Users\\KUNRR004\\Desktop)</p></body></html>"))
-        self.Storage_Input.setText(_translate("Dialog", "C:/"))
+        
+        first = Webhook.month_year()
+        second = Webhook.now()
+        storage = "J:/Documents for Imaging/Clive/%s/%s" % (first, second)
+        self.Storage_Input.setText(_translate("Dialog", f"{storage}"))
         
         self.Information.setHtml(_translate("Dialog", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
@@ -364,7 +267,7 @@ class Ui_Dialog(object):
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:600; font-style:italic;\">Version 1.0</span></p>\n"
 "<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:600; text-decoration: underline;\">Links</span></p>\n"
 "<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">GitHub - https://github.com/Nick-prog/Clive-Webhook</p>\n"
-"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Pipedream - https://pipedream.com/sources/dc_RWuzvge</p></body></html>"))
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Pipedream - https://pipedream.com</p></body></html>"))
         
         self.Real_Time.setToolTip(_translate("Dialog", "<html><head/><body><p><br/></p></body></html>"))
         self.Real_Time.setWhatsThis(_translate("Dialog", "<html><head/><body><p><span style=\" font-weight:600; font-style:italic;\">Tip:</span><span style=\" font-style:italic;\"> The information shown displays the current up-to-date values of the total entries for the &quot;Upload Documents&quot; form, as well as, the last time the data was pulled.</span></p></body></html>"))
@@ -395,21 +298,16 @@ class Ui_Dialog(object):
             item = self.Real_Time.item(y, 0)
             total = Webhook.entries(f"{critera[y]}")
             item.setText(_translate("Dialog", f"{total}"))
-
             item = self.Real_Time.item(y, 1)
             date = Webhook.date(f"{critera[y]}")
             item.setText(_translate("Dialog", f"{date}"))
-            
             item = self.Real_Time.item(y, 2)
             current = Webhook.current(f"{critera[y]}")
             item.setText(_translate("Dialog", f"{current}"))
-
             item = self.Real_Time.item(y, 3)
             last = Webhook.last()
             item.setText(_translate("Dialog", f"{last}"))
 
         self.Real_Time.setSortingEnabled(__sortingEnabled)
-        
-        self.Storage_Current.setText(_translate("Dialog", "<html><head/><body><p>C:/</p></body></html>"))
-        
+        self.Storage_Current.setText(_translate("Dialog", f"<html><head/><body><p>{storage}</p></body></html>"))
         self.Dept_Current.setText(_translate("Dialog", "<html><head/><body><p><span style=\" font-style:italic;\">Department?</span></p></body></html>"))
