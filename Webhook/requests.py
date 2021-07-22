@@ -8,6 +8,9 @@ dept_text = "Submit your document(s) to the following department:"
 mail_text = "Email"
 name_text = "Name"
 
+current_id = {}
+index = 0
+
 def total():
     Data = Webhook.id()
     dict = json.loads(Data)
@@ -15,6 +18,7 @@ def total():
     return total
 
 def download(dept, loc):
+    global index
     Data = Webhook.get()
     dict = json.loads(Data)
     list = dict["data"]
@@ -31,38 +35,51 @@ def download(dept, loc):
                 mail= str(fieldValues.get(mail_text)).strip("[']")
 
                 if (y == up_text and dept == "All"):
+                    id = Webhook.id()
+                    dict = json.loads(id)
+                    current_id[index] = dict["data"][x]["id"]
+                    index =+ 1
+
                     url = str(items).strip("[']")
                     path = f"{loc}"
-                    doc = wget.download(url, path)
-                    old_file = os.path.join(path, doc)
-                    new_file = os.path.join(path, applicant + "_" + f"{x}" +".pdf")
-                    os.rename(old_file, new_file)
+                    if(url != ""):
+                        doc = wget.download(url, path)
+                        old_file = os.path.join(path, doc)
+                        new_file = os.path.join(path, applicant + "_" + f"{x}" +".pdf")
+                        os.rename(old_file, new_file)
 
-                    file_name = f"{path}" + "/" + f"{applicant}" + "_" + "info.txt"
-                    file_info = open(file_name, "w")
-                    file_info.write("Name: " + name + "\n"
-                    + "Email: " + mail + "\n"
-                    + "Applicant: " + applicant + "\n"
-                    + "Description: " + description + "\n"
-                    + "Department: " + department)
-                    file_info.close()
+                        file_name = f"{path}" + "/" + f"{applicant}" + "_" + "info.txt"
+                        file_info = open(file_name, "w")
+                        file_info.write("Name: " + name + "\n"
+                        + "Email: " + mail + "\n"
+                        + "Applicant: " + applicant + "\n"
+                        + "Description: " + description + "\n"
+                        + "Department: " + department)
+                        file_info.close()
 
                 elif(y == up_text and department == f"{dept}"):
+                    id = Webhook.id()
+                    dict = json.loads(id)
+                    current_id[index] = dict["data"][x]["id"]
+                    index =+ 1
+
                     url = str(items).strip("[']")
                     path = f"{loc}"
-                    doc = wget.download(url, path)
-                    old_file = os.path.join(path, doc)
-                    new_file = os.path.join(path, applicant + "_" + f"{x}" + ".pdf")
-                    os.rename(old_file, new_file)
 
-                    file_name = f"{path}" + "/" + f"{applicant}" + "_" + "info.txt"
-                    file_info = open(file_name, "w")
-                    file_info.write("Name: " + name + "\n"
-                    + "Email: " + mail + "\n"
-                    + "Applicant: " + applicant + "\n"
-                    + "Description: " + description + "\n"
-                    + "Department: " + department)
-                    file_info.close()
+                    if(url != ""):
+                        doc = wget.download(url, path)
+                        old_file = os.path.join(path, doc)
+                        new_file = os.path.join(path, applicant + "_" + f"{x}" + ".pdf")
+                        os.rename(old_file, new_file)
+
+                        file_name = f"{path}" + "/" + f"{applicant}" + "_" + "info.txt"
+                        file_info = open(file_name, "w")
+                        file_info.write("Name: " + name + "\n"
+                        + "Email: " + mail + "\n"
+                        + "Applicant: " + applicant + "\n"
+                        + "Description: " + description + "\n"
+                        + "Department: " + department)
+                        file_info.close()
 
 def entries(dept):
     total = 0
@@ -94,7 +111,7 @@ def date(dept):
                 department = str(fieldValues.get(dept_text)).strip("[']")
                 if(y == dept_text and department == f"{dept}"):
                     result = list[x].get("event").get("body").get("formSubmission").get("context").get("time")
-                    date[x] = result[:-14]
+                    date[0] = result[:-14]
     
     return date[0]
 
@@ -111,11 +128,21 @@ def current(dept):
                 department = str(fieldValues.get(dept_text)).strip("[']")
                 if(y == dept_text and department == f"{dept}"):
                     result = list[x].get("event").get("body").get("formSubmission").get("context").get("time")
-                    current[x] = result[11:-8]
+                    current[0] = result[11:-8]
     
     return current[0]
 
 def last():
     today = datetime.now()
     today_format = today.strftime("%d/%m/%Y")
+    return today_format
+
+def month_year():
+    today = datetime.now()
+    today_format = today.strftime("%B %Y")
+    return today_format
+
+def now():
+    today = datetime.now()
+    today_format = today.strftime("%m.%d.%Y")
     return today_format
