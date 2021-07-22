@@ -27,7 +27,7 @@ class Ui_Dialog(object):
         Dialog.setObjectName("Dialog")
         Dialog.setFixedSize(638, 451)
         Dialog.setStyleSheet("background-color: rgb(226, 226, 226);")
-        Dialog.setWindowIcon(QIcon('Images/TAMUK Logo 3.jpg'))
+        Dialog.setWindowIcon(QIcon('Webhook-Images/TAMUK Logo 3.jpg'))
         Dialog.setWindowFlag(Qt.WindowMinimizeButtonHint, True)
 
         self.Horizontal_Line = QtWidgets.QFrame(Dialog)
@@ -137,7 +137,7 @@ class Ui_Dialog(object):
         self.Dept_Current.setObjectName("Dept_Current")
         self.Refresh = QtWidgets.QPushButton(Dialog)
         self.Refresh.setGeometry(QtCore.QRect(320, 30, 31, 31))
-        self.Refresh.setIcon(QIcon('Images/refresh-image.png'))
+        self.Refresh.setIcon(QIcon('Webhook-Images/refresh-image.png'))
         self.Refresh.setText("")
         self.Refresh.setObjectName("Refresh")
         self.Current_Status = QtWidgets.QLabel(Dialog)
