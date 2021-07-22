@@ -69,6 +69,7 @@ A Python 3.9 environment was used to create and run this program, but anything u
  * Added extra labels to the right of the "Pull" push button to better display the current state of the program.
  * Added a mininize feature and fixed window sizes.
  * Added images to the Dialog box and the "Refresh" button.
+ * Disabled editing rights for users on the real time information table.
  
  ## Reported/Known Bugs
  All reported bugs may be caused from similar instead of seperate instances.
