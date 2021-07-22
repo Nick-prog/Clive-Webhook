@@ -67,7 +67,8 @@ A Python 3.9 environment was used to create and run this program, but anything u
  * Removed the disable feature from the other options under Department and added their funcitonality.
  * Delete button now only removes the entries pulled at that time.
  * Added extra labels to the right of the "Pull" push button to better display the current state of the program.
- * Added a mininize feature and fixed window sizes
+ * Added a mininize feature and fixed window sizes.
+ * Added images to the Dialog box and the "Refresh" button.
  
  ## Reported Bugs
  All reported bugs may be caused from similar instead of seperate instances.
