@@ -1,15 +1,11 @@
-import Webhook, json, wget, os, os.path
+import Webhook
+import json
+import wget
+import os
+import os.path
 from datetime import datetime
 
-app_text = "Applicant ID (K0012345)"
-des_text = "Describe the document(s) you are loading."
-up_text = "Upload your file(s)"
-dept_text = "Submit your document(s) to the following department:"
-mail_text = "Email"
-name_text = "Name"
-
 current_id = {}
-index = 0
 
 def total():
     Data = Webhook.id()
@@ -18,7 +14,7 @@ def total():
     return total
 
 def download(dept, loc):
-    global index
+    index = 0
     Data = Webhook.get()
     dict = json.loads(Data)
     list = dict["data"]
@@ -28,58 +24,30 @@ def download(dept, loc):
             fieldValues = list[x].get("event").get("body").get("formSubmission").get("fieldValues")
             for y in fieldValues:
                 items = fieldValues.get(y)
-                department = str(fieldValues.get(dept_text)).strip("[']")
-                applicant = str(fieldValues.get(app_text)).strip("[']")
-                description = str(fieldValues.get(des_text)).strip("[']")
-                name = str(fieldValues.get(name_text)).strip("[']")
-                mail= str(fieldValues.get(mail_text)).strip("[']")
+                department = str(fieldValues.get(Webhook.text("dept_text"))).strip("[']")
+                applicant = str(fieldValues.get(Webhook.text("app_text"))).strip("[']")
+                description = str(fieldValues.get(Webhook.text("des_text"))).strip("[']")
+                name = str(fieldValues.get(Webhook.text("name_text"))).strip("[']")
+                mail= str(fieldValues.get(Webhook.text("mail_text"))).strip("[']")
 
-                if (y == up_text and dept == "All"):
+                if (y == Webhook.text("up_text") and department == f"{dept}"):
                     id = Webhook.id()
                     dict = json.loads(id)
                     current_id[index] = dict["data"][x]["id"]
-                    index =+ 1
-
+                    index += 1
                     url = str(items).strip("[']")
-                    path = f"{loc}"
+                    path = f"{loc}" + "/" + applicant.replace(" ", "")
                     if(url != ""):
-                        doc = wget.download(url, path)
-                        old_file = os.path.join(path, doc)
-                        new_file = os.path.join(path, applicant + "_" + f"{x}" +".pdf")
-                        os.rename(old_file, new_file)
-
-                        file_name = f"{path}" + "/" + f"{applicant}" + "_" + "info.txt"
-                        file_info = open(file_name, "w")
-                        file_info.write("Name: " + name + "\n"
-                        + "Email: " + mail + "\n"
-                        + "Applicant: " + applicant + "\n"
-                        + "Description: " + description + "\n"
-                        + "Department: " + department)
-                        file_info.close()
-
-                elif(y == up_text and department == f"{dept}"):
+                        Webhook.download_method(path, url, applicant, description, name, mail, department, x)
+                elif (y == Webhook.text("up_text") and dept == "All"):
                     id = Webhook.id()
                     dict = json.loads(id)
                     current_id[index] = dict["data"][x]["id"]
-                    index =+ 1
-
+                    index += 1
                     url = str(items).strip("[']")
                     path = f"{loc}"
-
                     if(url != ""):
-                        doc = wget.download(url, path)
-                        old_file = os.path.join(path, doc)
-                        new_file = os.path.join(path, applicant + "_" + f"{x}" + ".pdf")
-                        os.rename(old_file, new_file)
-
-                        file_name = f"{path}" + "/" + f"{applicant}" + "_" + "info.txt"
-                        file_info = open(file_name, "w")
-                        file_info.write("Name: " + name + "\n"
-                        + "Email: " + mail + "\n"
-                        + "Applicant: " + applicant + "\n"
-                        + "Description: " + description + "\n"
-                        + "Department: " + department)
-                        file_info.close()
+                        Webhook.download_method(path, url, applicant, description, name, mail, department, x)
 
 def entries(dept):
     total = 0
@@ -91,11 +59,11 @@ def entries(dept):
         for x in range(len(list)):
             fieldValues = list[x].get("event").get("body").get("formSubmission").get("fieldValues")
             for y in fieldValues:
-                department = str(fieldValues.get(dept_text)).strip("[']")
-                if(y == dept_text and department == f"{dept}"):
+                department = str(fieldValues.get(Webhook.text("dept_text"))).strip("[']")
+                if(y == Webhook.text("dept_text") and department == Webhook.departments(dept)):
                     total += 1
 
-    return total
+    return str(total)
 
 
 def date(dept):
@@ -108,8 +76,8 @@ def date(dept):
         for x in range(len(list)):
             fieldValues = list[x].get("event").get("body").get("formSubmission").get("fieldValues")
             for y in fieldValues:
-                department = str(fieldValues.get(dept_text)).strip("[']")
-                if(y == dept_text and department == f"{dept}"):
+                department = str(fieldValues.get(Webhook.text("dept_text"))).strip("[']")
+                if(y == Webhook.text("dept_text") and department == Webhook.departments(dept)):
                     result = list[x].get("event").get("body").get("formSubmission").get("context").get("time")
                     date[0] = result[:-14]
     
@@ -125,8 +93,8 @@ def current(dept):
         for x in range(len(list)):
             fieldValues = list[x].get("event").get("body").get("formSubmission").get("fieldValues")
             for y in fieldValues:
-                department = str(fieldValues.get(dept_text)).strip("[']")
-                if(y == dept_text and department == f"{dept}"):
+                department = str(fieldValues.get(Webhook.text("dept_text"))).strip("[']")
+                if(y == Webhook.text("dept_text") and department == Webhook.departments(dept)):
                     result = list[x].get("event").get("body").get("formSubmission").get("context").get("time")
                     current[0] = result[11:-8]
     
@@ -134,7 +102,7 @@ def current(dept):
 
 def last():
     today = datetime.now()
-    today_format = today.strftime("%d/%m/%Y")
+    today_format = today.strftime("%m/%d/%Y")
     return today_format
 
 def month_year():
@@ -146,3 +114,34 @@ def now():
     today = datetime.now()
     today_format = today.strftime("%m.%d.%Y")
     return today_format
+
+def download_method(path, url, applicant, description, name, mail, department, x):
+    if not os.path.exists(path):
+        os.makedirs(path)
+        doc = wget.download(url, path)
+        old_file = os.path.join(path, doc)
+        ext = os.path.splitext(path)
+        new_file = os.path.join(path, applicant + "_" + Webhook.abbrevations(description) + ext[1])
+        os.rename(old_file, new_file)
+
+        file_name = f"{path}" + "/" + f"{applicant}" + "_" + "info.txt"
+        file_info = open(file_name, "w")
+        file_info.write("Name: " + name + "\n"
+        + "Email: " + mail + "\n"
+        + "Applicant: " + applicant + "\n"
+        + "Department: " + department)
+        file_info.close()
+    else:
+        doc = wget.download(url, path)
+        old_file = os.path.join(path, doc)
+        ext = os.path.splitext(path)[1]
+        new_file = os.path.join(path, applicant + "_" + Webhook.abbrevations(description) + f"{x}" + ext[1])
+        os.rename(old_file, new_file)
+
+        file_name = f"{path}" + "/" + f"{applicant}" + "_" + "info.txt"
+        file_info = open(file_name, "w")
+        file_info.write("Name: " + name + "\n"
+        + "Email: " + mail + "\n"
+        + "Applicant: " + applicant + "\n"
+        + "Department: " + department)
+        file_info.close()
