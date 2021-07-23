@@ -2,5 +2,6 @@
 from .connection import *
 from .requests import *
 from .interface import *
+from .dictionaries import *
 
-__version__ = "1.0"
+__version__ = "1.2"
