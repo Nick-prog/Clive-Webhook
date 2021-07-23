@@ -1,7 +1,9 @@
 
+
 def abbrevations(x):
     dict = {
         "Affidavit of Intent": "1528",
+        "Certificate of Eligibility/Award Letter": "VETA-COE",
         "College Transcript": "UCT",
         "Degree Certificate": "UCT",
         "Duolingo Scores": "UDET",
@@ -12,20 +14,25 @@ def abbrevations(x):
         "IELTS Scores": "UELT",
         "Letter of Recommendation": "LTR",
         "MAT Scores": "UMAT",
-        "Military Discharge Form": "D214",
+        "Military Discharge Form": "VETA-DD214",
         "Military Leave & Earnings": "LES",
+        "Military Transcript": "VETA-TRNSCRPT-MLTRY",
         "Naturalization Certificate": "NCRT",
         "Other": "OTHR",
         "Passport": "PASS",
         "Personal Statement": "PERS",
+        "Proof of Dependency/Vital Records": "VETA-VITAL_RECORDS",
         "PTE Scores": "UPET",
         "Residency Alien Card": "RACD",
         "Resume": "RSME",
         "SAT or ACT Scores": "TSTS",
         "Statement of Purpose": "STMT",
         "Secondary School Transcript": "SCTR",
+        "TX Hazelwood Act Continued Enrollment Form": "VETA-CONT_ENROLMNT",
+        "TX Hazelwood Act Exemption App": "VETA-HZLWED-EXEMPT",
         "TOEFL Scores": "UTFL",
-        "TSI Scores": "UTSI"
+        "TSI Scores": "UTSI",
+        "VA Disability Rating Sheet": "VETA-LTR_DISAB-RATING"
     }
     return dict[x]
 
@@ -69,5 +76,21 @@ def table_horizontal(x):
         1 : "Date",
         2 : "Time",
         3 : "Last",
+    }
+    return dict[x]
+
+def exists(x):
+    dict = {
+        0: "_a",
+        1: "_b",
+        2: "_c",
+        3: "_d",
+        4: "_e",
+        5: "_f",
+        6: "_g",
+        7: "_h",
+        8: "_i",
+        9: "_j",
+        10: "_k"
     }
     return dict[x]
