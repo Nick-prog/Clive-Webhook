@@ -38,7 +38,8 @@ def download(dept, loc):
                     url = str(items).strip("[']")
                     path = f"{loc}" + "/" + applicant.replace(" ", "")
                     if(url != ""):
-                        Webhook.download_method(path, url, applicant, description, name, mail, department, x)
+                        Webhook.download_method(path, url, applicant, description, name, mail, department, index)
+
                 elif (y == Webhook.text("up_text") and dept == "All"):
                     id = Webhook.id()
                     dict = json.loads(id)
@@ -47,7 +48,7 @@ def download(dept, loc):
                     url = str(items).strip("[']")
                     path = f"{loc}"
                     if(url != ""):
-                        Webhook.download_method(path, url, applicant, description, name, mail, department, x)
+                        Webhook.download_method(path, url, applicant, description, name, mail, department, index)
 
 def entries(dept):
     total = 0
@@ -80,7 +81,7 @@ def date(dept):
                 if(y == Webhook.text("dept_text") and department == Webhook.departments(dept)):
                     result = list[x].get("event").get("body").get("formSubmission").get("context").get("time")
                     date[0] = result[:-14]
-    
+
     return date[0]
 
 def current(dept):
@@ -97,7 +98,7 @@ def current(dept):
                 if(y == Webhook.text("dept_text") and department == Webhook.departments(dept)):
                     result = list[x].get("event").get("body").get("formSubmission").get("context").get("time")
                     current[0] = result[11:-8]
-    
+
     return current[0]
 
 def last():
@@ -115,12 +116,13 @@ def now():
     today_format = today.strftime("%m.%d.%Y")
     return today_format
 
-def download_method(path, url, applicant, description, name, mail, department, x):
+def download_method(path, url, applicant, description, name, mail, department, index):
+
     if not os.path.exists(path):
         os.makedirs(path)
         doc = wget.download(url, path)
         old_file = os.path.join(path, doc)
-        ext = os.path.splitext(path)
+        ext = os.path.splitext(doc)
         new_file = os.path.join(path, applicant + "_" + Webhook.abbrevations(description) + ext[1])
         os.rename(old_file, new_file)
 
@@ -131,11 +133,12 @@ def download_method(path, url, applicant, description, name, mail, department, x
         + "Applicant: " + applicant + "\n"
         + "Department: " + department)
         file_info.close()
+
     else:
         doc = wget.download(url, path)
         old_file = os.path.join(path, doc)
-        ext = os.path.splitext(path)[1]
-        new_file = os.path.join(path, applicant + "_" + Webhook.abbrevations(description) + f"{x}" + ext[1])
+        ext = os.path.splitext(doc)
+        new_file = os.path.join(path, applicant + "_" + Webhook.abbrevations(description) + Webhook.exists(index) + ext[1])
         os.rename(old_file, new_file)
 
         file_name = f"{path}" + "/" + f"{applicant}" + "_" + "info.txt"
