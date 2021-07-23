@@ -1,4 +1,6 @@
-import Webhook, sys
+import Webhook
+import sys
+import timeit
 
 class Enrollment:
 
@@ -9,6 +11,6 @@ class Enrollment:
         ui.setupUi(Dialog)
         Dialog.show()
         sys.exit(app.exec_())
-        
+
 E = Enrollment()
 E.display()
