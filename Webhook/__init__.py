@@ -4,4 +4,4 @@ from .requests import *
 from .interface import *
 from .dictionaries import *
 
-__version__ = "1.2"
+__version__ = "1.2.1"
