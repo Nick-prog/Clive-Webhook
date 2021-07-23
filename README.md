@@ -17,7 +17,7 @@ The main purpose of this program was to utilize a webhook connection on an onlin
 <br />
  <p align="center">
   <a href="https://github.com/Nick-Prog/Clive-Webhook">
-    <img src="images/Clive-Webhook-1.1.png" alt="Logo" width="700" height="500">
+    <img src="images/Clive-Webhook-1.2.png" alt="Logo" width="700" height="500">
   </a>
    </p>
 </p>
@@ -26,13 +26,11 @@ The main purpose of this program was to utilize a webhook connection on an onlin
 
 * The box located on the **bottom left** titled **Department?** provides 7 different options for the user to pick. Each option was made according to the Clive form you can find at the TAMUK Upload Forms link below.
 
-* The box located on the **top right** contains real time information for the user if they wish to know what each departments current amount of entries available for pulling, the date and time they were last submitted, and the last date the system had checked for updates.
-
-**Disclaimer: The user must relaunch the program to receive up-to-date information on the table discussed above.**
+* The box located on the **top right** contains real time information for the user if they wish to know what each departments current amount of entries available for pulling, the date and time they were last submitted, and the last date the system had checked for updates. A "Refresh" push button can also be located to the **top left** of the table as well.
 
 * Finally, the box located on the **bottom right** titled **Storage Location?** indicates the storage location the user wishes to download their pulled documents to.
 
-All user inputs can be viewed on the labels below the progress bar before pulling. Once pulled, the delete button will become active allowing the user to remove the pulled documents from the pipedream webhook website. As of right now, this program can only pull and delete 100 documents at a time.
+All user inputs can be viewed on the labels below the progress bar before pulling. Once pulled, all downloading documents will become deleted automatically from the Pipedream webhook. Only up to a _100_ at a time!
 
 # Getting Started
 Follow the instruction below to successfully run the program.
@@ -45,7 +43,7 @@ A Python 3.9 environment was used to create and run this program, but anything u
     ```sh
     git clone https://github.com/your_username/Project-Name.git
     ```
- 2. Now that you have the files on your machine, replace all <webhook> and <api_key> values within the connection.py file. Your <api_key> can be found in the settings of your     account with Pipedream, without it you will be  unable to interact with the webhook link so keep it SAFE.
+ 2. Now that you have the files on your machine, replace all _webhook_ and _api_key_ values within the connection.py file. Your _api_key_ can be found in the settings of your     account with Pipedream, without it you will be  unable to interact with the webhook link so keep it SAFE.
  3. Finally, execute the main.py file and your program  should run after a short period.
  
  **Disclaimer: This program was made SPECIFICALLY for this exact problem. Unless the JSON Snippet metadata genearted for your problem is exactly the same, you must alter most if not all of the code.**
@@ -59,6 +57,19 @@ A Python 3.9 environment was used to create and run this program, but anything u
 </p>
  
 # Change Log
+ **Version 1.2**
+ * Fixed issues from verions 1.0 and 1.1.
+ * Reduced load and startup times by bolstering our reusable code methods.
+ * Removed progress bar progression for "Refresh" method to improve load times.
+ * Combined the "Pull" and "Delete" button method into one button, "Pull".
+ * Changed current status label next to "Pull" button to better articulate program status.
+ * Added dictionaries.py file for large dicts that may find us outside of their current implementations.
+ * Improved delete and download methods to reduce margin of error.
+ * Added folder creation functionality that allows the creation of non-existant storage locations possible.
+ * Removed text from genearl information box that was deemed unneccesary or out dated.
+ * Setup a single thread method that will be utilized by pull and refresh requests.
+ * Removed the "Description:" text from info.txt files.
+ 
  **Version 1.1**
  * Added a "Refresh" push button to the **top left** of the real time information table.
  * Improved load times and added a sleep thread to prevent multiple miss-inputs.
@@ -73,6 +84,10 @@ A Python 3.9 environment was used to create and run this program, but anything u
  
  ## Reported/Known Bugs
  All reported bugs may be caused from similar instead of seperate instances.
+ 
+ **Version 1.2**
+ * Program may still become temporarily frozen when downloading a large sum of files at once.
+ * Downloading errors are still a potential threat until stricter guidelines for the "Upload Documents" form are made.
  
  **Version 1.1**
  * When downloading to a large share drive, potential temporary freezing may occur.
