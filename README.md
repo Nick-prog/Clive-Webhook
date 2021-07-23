@@ -88,6 +88,7 @@ A Python 3.9 environment was used to create and run this program, but anything u
  **Version 1.2**
  * Program may still become temporarily frozen when downloading a large sum of files at once.
  * Downloading errors are still a potential threat until stricter guidelines for the "Upload Documents" form are made.
+ * Downloading similar documents can still lead to errors.
  
  **Version 1.1**
  * When downloading to a large share drive, potential temporary freezing may occur.
