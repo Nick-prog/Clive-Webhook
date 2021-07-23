@@ -11,15 +11,12 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
-import Webhook, time
-
-critera = { 0 : "Admission", 1 : "Financial Aid", 2 : "Military and Veteran Resource Center",
-3 : "Registrar", 4 : "International Student & Scholar Services", 5 : "Other", 6 : "All"}
+import Webhook
+import time
 
 class Thread(QtCore.QThread):
     def run(self):
-        QtCore.QThread.sleep(7)
-
+        QtCore.QThread.sleep(10)
 
 class Ui_Dialog(object):
 
@@ -29,21 +26,17 @@ class Ui_Dialog(object):
         Dialog.setStyleSheet("background-color: rgb(226, 226, 226);")
         Dialog.setWindowIcon(QIcon('Webhook-Images/TAMUK Logo 3.jpg'))
         Dialog.setWindowFlag(Qt.WindowMinimizeButtonHint, True)
-
         self.Horizontal_Line = QtWidgets.QFrame(Dialog)
         self.Horizontal_Line.setGeometry(QtCore.QRect(20, 350, 591, 20))
         self.Horizontal_Line.setFrameShape(QtWidgets.QFrame.HLine)
         self.Horizontal_Line.setFrameShadow(QtWidgets.QFrame.Sunken)
         self.Horizontal_Line.setObjectName("Horizontal_Line")
-
         self.verticalLayoutWidget_2 = QtWidgets.QWidget(Dialog)
         self.verticalLayoutWidget_2.setGeometry(QtCore.QRect(30, 210, 251, 131))
         self.verticalLayoutWidget_2.setObjectName("verticalLayoutWidget_2")
-
         self.verticalLayout = QtWidgets.QVBoxLayout(self.verticalLayoutWidget_2)
         self.verticalLayout.setContentsMargins(0, 0, 0, 0)
         self.verticalLayout.setObjectName("verticalLayout")
-
         self.Department = QtWidgets.QLabel(self.verticalLayoutWidget_2)
         self.Department.setObjectName("Department")
         self.verticalLayout.addWidget(self.Department)
@@ -59,41 +52,29 @@ class Ui_Dialog(object):
         self.progressBar.setGeometry(QtCore.QRect(40, 370, 571, 23))
         self.progressBar.setProperty("value", 0)
         self.progressBar.setObjectName("progressBar")
-
         self.Pull = QtWidgets.QPushButton(Dialog)
         self.Pull.setGeometry(QtCore.QRect(500, 410, 75, 23))
         self.Pull.setObjectName("Pull")
-
-        self.Delete = QtWidgets.QPushButton(Dialog)
-        self.Delete.setGeometry(QtCore.QRect(420, 410, 75, 23))
-        self.Delete.setObjectName("Delete")
-        self.Delete.setEnabled(False)
-
         self.verticalLayoutWidget = QtWidgets.QWidget(Dialog)
         self.verticalLayoutWidget.setGeometry(QtCore.QRect(320, 260, 301, 67))
         self.verticalLayoutWidget.setObjectName("verticalLayoutWidget")
-
         self.verticalLayout_2 = QtWidgets.QVBoxLayout(self.verticalLayoutWidget)
         self.verticalLayout_2.setContentsMargins(0, 0, 0, 0)
         self.verticalLayout_2.setObjectName("verticalLayout_2")
-
         self.Storage = QtWidgets.QLabel(self.verticalLayoutWidget)
         self.Storage.setObjectName("Storage")
         self.verticalLayout_2.addWidget(self.Storage)
         self.Storage_Input = QtWidgets.QLineEdit(self.verticalLayoutWidget)
         self.Storage_Input.setObjectName("Storage_Input")
         self.verticalLayout_2.addWidget(self.Storage_Input)
-
         self.Vertical_Line = QtWidgets.QFrame(Dialog)
         self.Vertical_Line.setGeometry(QtCore.QRect(290, 60, 20, 281))
         self.Vertical_Line.setFrameShape(QtWidgets.QFrame.VLine)
         self.Vertical_Line.setFrameShadow(QtWidgets.QFrame.Sunken)
         self.Vertical_Line.setObjectName("Vertical_Line")
-
         self.Information = QtWidgets.QTextBrowser(Dialog)
         self.Information.setGeometry(QtCore.QRect(20, 40, 271, 151))
         self.Information.setObjectName("Information")
-
         self.Real_Time = QtWidgets.QTableWidget(Dialog)
         self.Real_Time.setGeometry(QtCore.QRect(320, 30, 301, 221))
         self.Real_Time.setMinimumSize(QtCore.QSize(155, 0))
@@ -147,77 +128,48 @@ class Ui_Dialog(object):
         self.retranslateUi(Dialog)
         self.Storage_Input.textChanged['QString'].connect(self.Storage_Current.setText)
         self.Dept_List.currentTextChanged['QString'].connect(self.Dept_Current.setText)
-
+        self.thread = Thread()
         self.Pull.clicked.connect(self.on_click)
-        self.Pull_Thread = Thread()
-        self.Pull_Thread.finished.connect(lambda: self.Pull.setEnabled(True))
-        self.Delete.clicked.connect(self.on_delete)
-        self.Delete_Thread = Thread()
-        self.Delete_Thread.finished.connect(lambda: self.Delete.setEnabled(False))
+        self.thread.finished.connect(lambda: self.Pull.setEnabled(True))
         self.Refresh.clicked.connect(self.on_refresh)
-        self.Refresh_Thread = Thread()
-        self.Refresh_Thread.finished.connect(lambda: self.Refresh.setEnabled(True))
+        self.thread.finished.connect(lambda: self.Refresh.setEnabled(True))
 
         QtCore.QMetaObject.connectSlotsByName(Dialog)
 
     def on_click(self):
-        if not self.Pull_Thread.isRunning():
+        if not self.thread.isRunning():
             self.Pull.setEnabled(False)
             self.Refresh.setEnabled(False)
-            self.Current_Status.setText("Loading...")
-            self.Pull_Thread.start()
+            self.Current_Status.setText("Wating...")
+            self.thread.start()
             location = self.Storage_Input.text()
             department = self.Dept_List.currentItem()
             for i in range(101):
                 time.sleep(0.05)
                 self.progressBar.setValue(i)
-            self.Current_Status.setText("Pulled!")
             self.progressBar.setValue(0)
+            self.Current_Status.setText("Pulled!")
             Webhook.download(department.text(),location)
-            self.Delete.setEnabled(True)
+            Webhook.delete(department.text())
             self.Refresh.setEnabled(True)
 
-    def on_delete(self):
-        if not self.Delete_Thread.isRunning():
-            self.Delete.setEnabled(False)
-            self.Current_Status.setText("Loading...")
-            self.Delete_Thread.start()
-            for i in range(101):
-                time.sleep(0.05)
-                self.progressBar.setValue(i)
-            self.Current_Status.setText("Deleted!")
-            self.progressBar.setValue(0)
-            department = self.Dept_List.currentItem()
-            if(department == "All"):
-                Webhook.delete()
-            else:
-                Webhook.delete_current()
-
     def on_refresh(self):
-        if not self.Refresh_Thread.isRunning():
+        if not self.thread.isRunning():
             self.Refresh.setEnabled(False)
             self.Pull.setEnabled(False)
-            self.Current_Status.setText("Loading...")
-            self.Refresh_Thread.start()
-            for i in range(101):
-                    time.sleep(0.02)
-                    self.progressBar.setValue(i)
-            self.Current_Status.setText("Refreshed!")
+            self.Current_Status.setText("Waiting...")
+            self.thread.start()
             _translate = QtCore.QCoreApplication.translate
             for y in range(6):
                 item = self.Real_Time.item(y, 0)
-                total = Webhook.entries(f"{critera[y]}")
-                item.setText(_translate("Dialog", f"{total}"))
+                item.setText(_translate("Dialog", Webhook.entries(y)))
                 item = self.Real_Time.item(y, 1)
-                date = Webhook.date(f"{critera[y]}")
-                item.setText(_translate("Dialog", f"{date}"))
+                item.setText(_translate("Dialog", Webhook.date(y)))
                 item = self.Real_Time.item(y, 2)
-                current = Webhook.current(f"{critera[y]}")
-                item.setText(_translate("Dialog", f"{current}"))
+                item.setText(_translate("Dialog", Webhook.current(y)))
                 item = self.Real_Time.item(y, 3)
-                last = Webhook.last()
-                item.setText(_translate("Dialog", f"{last}"))
-            self.progressBar.setValue(0)
+                item.setText(_translate("Dialog", Webhook.last()))
+            self.Current_Status.setText("Refreshed!")
             self.Pull.setEnabled(True)
 
     def retranslateUi(self, Dialog):
@@ -230,84 +182,56 @@ class Ui_Dialog(object):
 
         for x in range(7):
             item = self.Dept_List.item(x)
-            item.setText(_translate("Dialog", f"{critera[x]}"))
+            item.setText(_translate("Dialog", Webhook.departments(x)))
 
         self.Dept_List.setSortingEnabled(__sortingEnabled)
         self.Pull.setText(_translate("Dialog", "Pull"))
-        self.Delete.setText(_translate("Dialog", "Delete"))
         self.verticalLayoutWidget.setWhatsThis(_translate("Dialog", "<html><head/><body><p><span style=\" font-weight:600; font-style:italic;\">Tip:</span><span style=\" font-style:italic;\">  This dialogue box specifies the location the user wishes to store the downloaded files... </span>(Ex: C:\\Users\\KUNRR004\\Desktop)</p></body></html>"))
         self.Storage.setWhatsThis(_translate("Dialog", "<html><head/><body><p><span style=\" font-weight:600; font-style:italic;\">Tip:</span><span style=\" font-style:italic;\">  This dialogue box specifies the location the user wishes to store the downloaded files... </span>(Ex: C:\\Users\\KUNRR004\\Desktop)</p></body></html>"))
         self.Storage.setText(_translate("Dialog", "<html><head/><body><p align=\"center\"><span style=\" font-size:9pt; font-weight:600;\">Storage Location?</span></p></body></html>"))
         self.Storage_Input.setWhatsThis(_translate("Dialog", "<html><head/><body><p><span style=\" font-weight:600; font-style:italic;\">Tip:</span><span style=\" font-style:italic;\">  This dialogue box specifies the location the user wishes to store the downloaded files... </span>(Ex: C:\\Users\\KUNRR004\\Desktop)</p></body></html>"))
-        
-        first = Webhook.month_year()
-        second = Webhook.now()
-        storage = "J:/Documents for Imaging/Clive/%s/%s" % (first, second)
-        self.Storage_Input.setText(_translate("Dialog", f"{storage}"))
-        
+        self.Storage_Input.setText(_translate("Dialog", "J:/Documents for Imaging/Clive/%s/%s" % (Webhook.month_year(), Webhook.now())))
         self.Information.setHtml(_translate("Dialog", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'MS Shell Dlg 2\'; font-size:8.25pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:600;\">Information</span></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">- General</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">This program was created within the Python programmign language to easily pull data genearted from the webhook attached to the &quot;Upload Documents&quot; clive form. The process involves parsing JSON Snippet metadata through a series of dicts and list variables until the relevant information is reached (Applicant ID, Description of the document, etc...).</p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The table located on the top right will display helpful information based on the traffic received by the webhook at that instance. Each row contains a numbe thatr indicates a department option to select (Ex: &quot;Admisison&quot;= &quot;-1&quot;, &quot;Financial Aid&quot; = &quot;-2-&quot;, etc...). For each column, a user can determine the current amount of entries submitted, date of the last submitted entry, time of the last submitted entry, and the last date checked.</p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
-"<p align=\"left\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:600; text-decoration: underline;\">Disclaimer:</span> <span style=\" font-style:italic;\">The program does not display updated values until the user closes and relaunches the program.</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The table located on the top right will display helpful information based on the traffic received by the webhook. Each row displays a number that indicates a department (Ex: &quot;Admisison&quot;= &quot;-1-&quot;, &quot;Financial Aid&quot; = &quot;-2-&quot;, etc.). For each column, information on the current amount of entries per department, the date and time of the last entry, as well as the last time the system updated will be displayed.</p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">- How do you use this program?</p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">To fully utilize this program, the user must specify what department they wish to focus on along with a location on their PC to store the downloaded documents. Once done, the user can veiw two labels below the progress bar to confirm their selections before clicking the &quot;Pull&quot; button to activate the process. The progress bar will then progressively fill up to indicate when the process is finished.</p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Once completed, the &quot;Delete&quot; button will become avaliable to click allowing the user to delete the entries currently pulled from the Pipedream webhook. </p>\n"
+"<p align=\"left\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:600; text-decoration: underline;\">Disclaimer:</span> <span style=\" font-style:italic;\">This program will pull only 100 entries at a time but will delete everything pulled at that time.</span></p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
-"<p align=\"left\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:600; text-decoration: underline;\">Disclaimer:</span> <span style=\" font-style:italic;\">This program will pull only 100 entries at a time but will delete up to 100 entries from the last pull. Don\'t forget to press the &quot;Delete&quot; button after using the &quot;Pull&quot; button to ensure proper downloading parameters.</span></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:600; font-style:italic;\">Version 1.1</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:600; font-style:italic;\">Version 1.2</span></p>\n"
 "<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:600; text-decoration: underline;\">Links</span></p>\n"
 "<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">GitHub - https://github.com/Nick-prog/Clive-Webhook</p>\n"
 "<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Pipedream - https://pipedream.com</p></body></html>"))
-        
         self.Real_Time.setToolTip(_translate("Dialog", "<html><head/><body><p><br/></p></body></html>"))
         self.Real_Time.setWhatsThis(_translate("Dialog", "<html><head/><body><p><span style=\" font-weight:600; font-style:italic;\">Tip:</span><span style=\" font-style:italic;\"> The information shown displays the current up-to-date values of the total entries for the &quot;Upload Documents&quot; form, as well as, the last time the data was pulled.</span></p></body></html>"))
-        item = self.Real_Time.verticalHeaderItem(0)
-        item.setText(_translate("Dialog", "-1-"))
-        item = self.Real_Time.verticalHeaderItem(1)
-        item.setText(_translate("Dialog", "-2-"))
-        item = self.Real_Time.verticalHeaderItem(2)
-        item.setText(_translate("Dialog", "-3-"))
-        item = self.Real_Time.verticalHeaderItem(3)
-        item.setText(_translate("Dialog", "-4-"))
-        item = self.Real_Time.verticalHeaderItem(4)
-        item.setText(_translate("Dialog", "-5-"))
-        item = self.Real_Time.verticalHeaderItem(5)
-        item.setText(_translate("Dialog", "-6-"))
-        item = self.Real_Time.horizontalHeaderItem(0)
-        item.setText(_translate("Dialog", "Entries"))
-        item = self.Real_Time.horizontalHeaderItem(1)
-        item.setText(_translate("Dialog", "Date"))
-        item = self.Real_Time.horizontalHeaderItem(2)
-        item.setText(_translate("Dialog", "Time"))
-        item = self.Real_Time.horizontalHeaderItem(3)
-        item.setText(_translate("Dialog", "Last"))
+
+        for y in range(6):
+            item = self.Real_Time.verticalHeaderItem(y)
+            item.setText(_translate("Dialog", Webhook.table_vertical(y)))
+
+        for x in range(4):
+            item = self.Real_Time.horizontalHeaderItem(x)
+            item.setText(_translate("Dialog", Webhook.table_horizontal(x)))
+
         __sortingEnabled = self.Real_Time.isSortingEnabled()
         self.Real_Time.setSortingEnabled(False)
 
         for y in range(6):
             item = self.Real_Time.item(y, 0)
-            total = Webhook.entries(f"{critera[y]}")
-            item.setText(_translate("Dialog", f"{total}"))
+            item.setText(_translate("Dialog", Webhook.entries(y)))
             item = self.Real_Time.item(y, 1)
-            date = Webhook.date(f"{critera[y]}")
-            item.setText(_translate("Dialog", f"{date}"))
+            item.setText(_translate("Dialog", Webhook.date(y)))
             item = self.Real_Time.item(y, 2)
-            current = Webhook.current(f"{critera[y]}")
-            item.setText(_translate("Dialog", f"{current}"))
+            item.setText(_translate("Dialog", Webhook.current(y)))
             item = self.Real_Time.item(y, 3)
-            last = Webhook.last()
-            item.setText(_translate("Dialog", f"{last}"))
+            item.setText(_translate("Dialog", Webhook.last()))
 
         self.Real_Time.setSortingEnabled(__sortingEnabled)
-        self.Storage_Current.setText(_translate("Dialog", f"<html><head/><body><p>{storage}</p></body></html>"))
+        self.Storage_Current.setText(_translate("Dialog", f"<html><head/><body><p>J:/Documents for Imaging/Clive/%s/%s</p></body></html>" % (Webhook.month_year(), Webhook.now())))
         self.Dept_Current.setText(_translate("Dialog", "<html><head/><body><p><span style=\" font-style:italic;\">Department?</span></p></body></html>"))
