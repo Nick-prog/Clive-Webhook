@@ -57,6 +57,11 @@ A Python 3.9 environment was used to create and run this program, but anything u
 </p>
  
 # Change Log
+ **Version 1.2.1**
+ * Fixed downloading issues.
+ * Added new dictionaries to reduce code length and improve reuseability
+ * Removed dead code.
+
  **Version 1.2**
  * Fixed issues from verions 1.0 and 1.1.
  * Reduced load and startup times by bolstering our reusable code methods.
