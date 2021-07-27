@@ -1,7 +1,6 @@
 import Webhook
 import json
 import wget
-import os
 import os.path
 from datetime import datetime
 
@@ -35,7 +34,8 @@ def download(dept, loc):
                     dict = json.loads(id)
                     current_id[index] = dict["data"][x]["id"]
                     index += 1
-                    url = str(items).strip("[']")
+                    temp = str(items).strip("[']")
+                    url = str(temp).replace("\\", "/")
                     path = f"{loc}" + "/" + applicant.replace(" ", "")
                     if(url != ""):
                         Webhook.download_method(path, url, applicant, description, name, mail, department, index)
