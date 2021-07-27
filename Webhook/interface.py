@@ -11,6 +11,7 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
+from PyQt5.QtWidgets import *
 import Webhook
 import time
 
@@ -109,7 +110,7 @@ class Ui_Dialog(object):
                 item.setFont(font)
                 self.Real_Time.setItem(x, y, item)
                 item.setFlags(Qt.ItemIsEditable)
-
+            
         self.Storage_Current = QtWidgets.QLabel(Dialog)
         self.Storage_Current.setGeometry(QtCore.QRect(40, 400, 331, 20))
         self.Storage_Current.setObjectName("Storage_Current")
@@ -134,30 +135,46 @@ class Ui_Dialog(object):
         self.Refresh.clicked.connect(self.on_refresh)
         self.thread.finished.connect(lambda: self.Refresh.setEnabled(True))
 
+        self.buttonReply = QtWidgets.QMessageBox(Dialog)
+        self.buttonReply.setFixedSize(200, 300)
+        self.buttonReply.setObjectName("Confirmation Box")
+        self.buttonReply.setText("Are you sure?")
+        self.buttonReply.setStandardButtons(QMessageBox.Yes | QMessageBox.No)
+        self.buttonReply.setWindowTitle("Confirmation")
+
+
+
         QtCore.QMetaObject.connectSlotsByName(Dialog)
 
     def on_click(self):
-        if not self.thread.isRunning():
-            self.Pull.setEnabled(False)
-            self.Refresh.setEnabled(False)
-            self.Current_Status.setText("Wating...")
-            self.thread.start()
-            location = self.Storage_Input.text()
-            department = self.Dept_List.currentItem()
-            for i in range(101):
-                time.sleep(0.05)
-                self.progressBar.setValue(i)
-            self.progressBar.setValue(0)
-            self.Current_Status.setText("Pulled!")
-            Webhook.download(department.text(),location)
-            Webhook.delete(department.text())
-            self.Refresh.setEnabled(True)
+        self.buttonReply.setInformativeText("%s\n%s" %(self.Storage_Current.text(), self.Dept_Current.text()))
+        if self.buttonReply.exec() == QMessageBox.Yes:
+            if not self.thread.isRunning():
+                self.Pull.setEnabled(False)
+                self.Refresh.setEnabled(False)
+                self.Current_Status.setText("Wating...")
+                self.thread.start()
+                location = self.Storage_Input.text()
+                department = self.Dept_List.currentItem()
+                for i in range(101):
+                    time.sleep(0.05)
+                    self.progressBar.setValue(i)
+                self.progressBar.setValue(0)
+                self.Current_Status.setText("Pulled!")
+                Webhook.download(department.text(),location)
+                Webhook.delete(department.text())
+                self.Refresh.setEnabled(True)
+        else:
+            pass
 
     def on_refresh(self):
         if not self.thread.isRunning():
             self.Refresh.setEnabled(False)
             self.Pull.setEnabled(False)
             self.Current_Status.setText("Waiting...")
+            for i in range(101):
+                time.sleep(0.05)
+                self.progressBar.setValue(i)
             self.thread.start()
             _translate = QtCore.QCoreApplication.translate
             for y in range(6):
@@ -169,6 +186,7 @@ class Ui_Dialog(object):
                 item.setText(_translate("Dialog", Webhook.current(y)))
                 item = self.Real_Time.item(y, 3)
                 item.setText(_translate("Dialog", Webhook.last()))
+            self.progressBar.setValue(0)
             self.Current_Status.setText("Refreshed!")
             self.Pull.setEnabled(True)
 
@@ -186,11 +204,11 @@ class Ui_Dialog(object):
 
         self.Dept_List.setSortingEnabled(__sortingEnabled)
         self.Pull.setText(_translate("Dialog", "Pull"))
-        self.verticalLayoutWidget.setWhatsThis(_translate("Dialog", "<html><head/><body><p><span style=\" font-weight:600; font-style:italic;\">Tip:</span><span style=\" font-style:italic;\">  This dialogue box specifies the location the user wishes to store the downloaded files... </span>(Ex: C:\\Users\\KUNRR004\\Desktop)</p></body></html>"))
-        self.Storage.setWhatsThis(_translate("Dialog", "<html><head/><body><p><span style=\" font-weight:600; font-style:italic;\">Tip:</span><span style=\" font-style:italic;\">  This dialogue box specifies the location the user wishes to store the downloaded files... </span>(Ex: C:\\Users\\KUNRR004\\Desktop)</p></body></html>"))
+        self.verticalLayoutWidget.setWhatsThis(_translate("Dialog", "<html><head/><body><p><span style=\" font-weight:600; font-style:italic;\">Tip:</span><span style=\" font-style:italic;\">  This dialogue box specifies the location the user wishes to store the downloaded files... </span>(Ex: C:/Users/KUNRR004/Desktop)</p></body></html>"))
+        self.Storage.setWhatsThis(_translate("Dialog", "<html><head/><body><p><span style=\" font-weight:600; font-style:italic;\">Tip:</span><span style=\" font-style:italic;\">  This dialogue box specifies the location the user wishes to store the downloaded files... </span>(Ex: C:/Users/KUNRR004/Desktop)</p></body></html>"))
         self.Storage.setText(_translate("Dialog", "<html><head/><body><p align=\"center\"><span style=\" font-size:9pt; font-weight:600;\">Storage Location?</span></p></body></html>"))
-        self.Storage_Input.setWhatsThis(_translate("Dialog", "<html><head/><body><p><span style=\" font-weight:600; font-style:italic;\">Tip:</span><span style=\" font-style:italic;\">  This dialogue box specifies the location the user wishes to store the downloaded files... </span>(Ex: C:\\Users\\KUNRR004\\Desktop)</p></body></html>"))
-        self.Storage_Input.setText(_translate("Dialog", "J:/Documents for Imaging/Clive/%s/%s" % (Webhook.month_year(), Webhook.now())))
+        self.Storage_Input.setWhatsThis(_translate("Dialog", "<html><head/><body><p><span style=\" font-weight:600; font-style:italic;\">Tip:</span><span style=\" font-style:italic;\">  This dialogue box specifies the location the user wishes to store the downloaded files... </span>(Ex: C:/Users/KUNRR004/Desktop)</p></body></html>"))
+        self.Storage_Input.setText(_translate("Dialog", "//fs16.tamuk.edu/ds$/Admissions/Documents for Imaging/Clive/%s/%s" %(Webhook.month_year(), Webhook.now())))
         self.Information.setHtml(_translate("Dialog", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
@@ -204,10 +222,10 @@ class Ui_Dialog(object):
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
 "<p align=\"left\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:600; text-decoration: underline;\">Disclaimer:</span> <span style=\" font-style:italic;\">This program will pull only 100 entries at a time but will delete everything pulled at that time.</span></p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:600; font-style:italic;\">Version 1.2.1</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:600; font-style:italic;\">Version %s</span></p>\n"
 "<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:600; text-decoration: underline;\">Links</span></p>\n"
 "<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">GitHub - https://github.com/Nick-prog/Clive-Webhook</p>\n"
-"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Pipedream - https://pipedream.com</p></body></html>"))
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Pipedream - https://pipedream.com/sources/dc_RWuzvge</p></body></html>") % Webhook.__version__)
         self.Real_Time.setToolTip(_translate("Dialog", "<html><head/><body><p><br/></p></body></html>"))
         self.Real_Time.setWhatsThis(_translate("Dialog", "<html><head/><body><p><span style=\" font-weight:600; font-style:italic;\">Tip:</span><span style=\" font-style:italic;\"> The information shown displays the current up-to-date values of the total entries for the &quot;Upload Documents&quot; form, as well as, the last time the data was pulled.</span></p></body></html>"))
 
@@ -222,16 +240,6 @@ class Ui_Dialog(object):
         __sortingEnabled = self.Real_Time.isSortingEnabled()
         self.Real_Time.setSortingEnabled(False)
 
-        for y in range(6):
-            item = self.Real_Time.item(y, 0)
-            item.setText(_translate("Dialog", Webhook.entries(y)))
-            item = self.Real_Time.item(y, 1)
-            item.setText(_translate("Dialog", Webhook.date(y)))
-            item = self.Real_Time.item(y, 2)
-            item.setText(_translate("Dialog", Webhook.current(y)))
-            item = self.Real_Time.item(y, 3)
-            item.setText(_translate("Dialog", Webhook.last()))
-
         self.Real_Time.setSortingEnabled(__sortingEnabled)
-        self.Storage_Current.setText(_translate("Dialog", f"<html><head/><body><p>J:/Documents for Imaging/Clive/%s/%s</p></body></html>" % (Webhook.month_year(), Webhook.now())))
+        self.Storage_Current.setText(_translate("Dialog", "<html><head/><body><p>//fs16.tamuk.edu/ds$/Admissions/Documents for Imaging/Clive/%s/%s</p></body></html>" % (Webhook.month_year(), Webhook.now())))
         self.Dept_Current.setText(_translate("Dialog", "<html><head/><body><p><span style=\" font-style:italic;\">Department?</span></p></body></html>"))
