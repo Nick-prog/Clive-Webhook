@@ -57,9 +57,20 @@ A Python 3.9 environment was used to create and run this program, but anything u
 </p>
  
 # Change Log
+**Version 1.2.2 - 1.3.1**
+* Added a pop-up dialog box to confirm your selection.
+* Optimized loading times by removing real time data information from populating on startup.
+* Fixed the default value for storage location to better suit this problem.
+* Added more entries to the exists and abbrevations dict in dictionaries.py.
+* Re-connected the progress bar to the on_refresh event.
+* Improved code in various areas.
+* Added a timer to track startup times. (Current: ~ 0.56 secs| Previous: ~ 4 to 5 secs)
+* Combined the on_click and on_refresh event thread usage to save lines of code.
+* Added a "\_\_title__" method to correctly display the name of the current applcation.
+
  **Version 1.2.1**
  * Fixed downloading issues.
- * Added new dictionaries to reduce code length and improve reuseability
+ * Added new dictionaries to reduce code length and improve reuseability.
  * Removed dead code.
 
  **Version 1.2**
