@@ -134,16 +134,12 @@ class Ui_Dialog(object):
         self.thread.finished.connect(lambda: self.Pull.setEnabled(True))
         self.Refresh.clicked.connect(self.on_refresh)
         self.thread.finished.connect(lambda: self.Refresh.setEnabled(True))
-
         self.buttonReply = QtWidgets.QMessageBox(Dialog)
         self.buttonReply.setFixedSize(200, 300)
         self.buttonReply.setObjectName("Confirmation Box")
         self.buttonReply.setText("Are you sure?")
         self.buttonReply.setStandardButtons(QMessageBox.Yes | QMessageBox.No)
         self.buttonReply.setWindowTitle("Confirmation")
-
-
-
         QtCore.QMetaObject.connectSlotsByName(Dialog)
 
     def on_click(self):
@@ -239,7 +235,6 @@ class Ui_Dialog(object):
 
         __sortingEnabled = self.Real_Time.isSortingEnabled()
         self.Real_Time.setSortingEnabled(False)
-
         self.Real_Time.setSortingEnabled(__sortingEnabled)
         self.Storage_Current.setText(_translate("Dialog", "<html><head/><body><p>//fs16.tamuk.edu/ds$/Admissions/Documents for Imaging/Clive/%s/%s</p></body></html>" % (Webhook.month_year(), Webhook.now())))
         self.Dept_Current.setText(_translate("Dialog", "<html><head/><body><p><span style=\" font-style:italic;\">Department?</span></p></body></html>"))
