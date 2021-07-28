@@ -1,7 +1,8 @@
 
-def abbrevations(x):
+def abbrevations(x): #Dictionary for the different options in "Describe the document(s) you are loading."
     dict = {
         "Affidavit of Intent": "1528",
+        "All/Multiple" : "All",
         "Certificate of Eligibility/Award Letter": "VETA-COE",
         "College Transcript": "UCT",
         "Degree Certificate": "UCT",
@@ -30,12 +31,12 @@ def abbrevations(x):
         "TX Hazelwood Act Continued Enrollment Form": "VETA-CONT_ENROLMNT",
         "TX Hazelwood Act Exemption App": "VETA-HZLWED-EXEMPT",
         "TOEFL Scores": "UTFL",
-        "TSI Scores": "UTSI",
+        "TSI Scores": "TSIA",
         "VA Disability Rating Sheet": "VETA-LTR_DISAB-RATING"
     }
     return dict[x]
 
-def departments(x):
+def departments(x): #Dictionary for the different option in "Submit your document(s) to the following department:"
     dict = { 
         0 : "Admission", 
         1 : "Financial Aid", 
@@ -47,7 +48,7 @@ def departments(x):
     }
     return dict[x]
 
-def text(x):
+def text(x): #Dictionary to shorten the categories present on the Upload Documents Clive form
     dict = {
         "app_text": "Applicant ID (K0012345)",
         "des_text": "Describe the document(s) you are loading.",
@@ -58,7 +59,7 @@ def text(x):
     }
     return dict[x]
 
-def table_vertical(x):
+def table_vertical(x): #Dictonary for the rows present in the Real Time Table Information on the GUI
     dict = {
         0 : "-1-",
         1 : "-2-",
@@ -69,7 +70,7 @@ def table_vertical(x):
     }
     return dict[x]
 
-def table_horizontal(x):
+def table_horizontal(x): #Dictonary for the columns present in the Real Time Table Information on the GUI
     dict = {
         0 : "Entries",
         1 : "Date",
@@ -78,7 +79,7 @@ def table_horizontal(x):
     }
     return dict[x]
 
-def exists(x):
+def exists(x): #Dictionary for any potential repeat files sent by students
     dict = {
         0: "_a",
         1: "_b",
