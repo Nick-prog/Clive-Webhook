@@ -57,6 +57,11 @@ A Python 3.9 environment was used to create and run this program, but anything u
 </p>
  
 # Change Log
+**Version 1.3.2**
+* Improved the downloading requests definition in the requests.py file.
+* Added a new dict option in the abbreviation definition in the dictionaries.py file.
+* Added comments to important sections of the code.
+
 **Version 1.2.2 - 1.3.1**
 * Added a pop-up dialog box to confirm your selection.
 * Optimized loading times by removing real time data information from populating on startup.
