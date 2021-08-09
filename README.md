@@ -17,18 +17,38 @@ The main purpose of this program was to utilize a webhook connection on an onlin
 <br />
  <p align="center">
   <a href="https://github.com/Nick-Prog/Clive-Webhook">
-    <img src="images/Clive-Webhook-1.2.png" alt="Logo" width="700" height="500">
+    <img src="images/Clive-Webhook-1.4.1 (1).png" alt="Logo" width="700" height="500">
   </a>
    </p>
 </p>
 
-* The box located on the **top left** provides general information for the user if they wish to understand the purpose of the program, as well as, how to use its most basic features.
+This tab was created for the clive form titled "Upload Documents".
+
+* The box located on the **top left** provides general information for the user, as well as, a summary of how to use the features of the program.
 
 * The box located on the **bottom left** titled **Department?** provides 7 different options for the user to pick. Each option was made according to the Clive form you can find at the TAMUK Upload Forms link below.
 
 * The box located on the **top right** contains real time information for the user if they wish to know what each departments current amount of entries available for pulling, the date and time they were last submitted, and the last date the system had checked for updates. A "Refresh" push button can also be located to the **top left** of the table as well.
 
-* Finally, the box located on the **bottom right** titled **Storage Location?** indicates the storage location the user wishes to download their pulled documents to.
+* Finally, the box located on the **bottom right** titled **Storage Location?** allows the user to specify what directory they wish to store the pulled files.
+
+<br />
+ <p align="center">
+  <a href="https://github.com/Nick-Prog/Clive-Webhook">
+    <img src="images/Clive-Webhook-1.4.1 (2).png" alt="Logo" width="700" height="500">
+  </a>
+   </p>
+</p>
+
+This tab was created for the clive form titled "Fee Wavior Request".
+
+* The box located on the **left** provides general information for the user, as well as, a summary of how to use the features of the program.
+
+* The box located on the **top right** contains real time information for the user if they wish to know how many entries are currently available to pull. A "Refresh" push button can also be located to the **top left** of the graph as well.
+
+* Finally, the box located on the **bottom right** titled **Storage Location?** allows the user to specify what directory they wish to store the pulled files.
+
+_________________________________________________________________________________________________________________________________________________________________________________
 
 All user inputs can be viewed on the labels below the progress bar before pulling. Once pulled, all downloading documents will become deleted automatically from the Pipedream webhook. Only up to a _100_ at a time!
 
