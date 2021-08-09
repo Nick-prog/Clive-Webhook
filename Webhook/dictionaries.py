@@ -24,6 +24,7 @@ def abbrevations(x): #Dictionary for the different options in "Describe the docu
         "Proof of Dependency/Vital Records": "VETA-VITAL_RECORDS",
         "PTE Scores": "UPET",
         "Residency Alien Card": "RACD",
+        "Residency Verification Form": "RSVF",
         "Resume": "RSME",
         "SAT or ACT Scores": "TSTS",
         "Statement of Purpose": "STMT",
@@ -56,6 +57,17 @@ def text(x): #Dictionary to shorten the categories present on the Upload Documen
         "dept_text": "Submit your document(s) to the following department:",
         "mail_text": "Email",
         "name_text": "Name"
+    }
+    return dict[x]
+
+def text2(x): #Dictionary to shorten the categories present on the Fee Waiver Request Clive form
+    dict = {
+        "first_text": "First Name",
+        "last_text": "Last Name",
+        "phone_text": "Phone Number",
+        "mail_text": "Email",
+        "up_text": "Fee Waiver Supportive Document",
+        "app_text": "Applicant ID (K0012345)"
     }
     return dict[x]
 
