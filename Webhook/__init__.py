@@ -4,5 +4,5 @@ from .requests import *
 from .interface import *
 from .dictionaries import *
 
-__version__ = "1.3.2"
-__title__ = "Clive-1.3.2"
+__version__ = "1.4.1"
+__title__ = "Clive-1.4.1"
