@@ -57,6 +57,12 @@ A Python 3.9 environment was used to create and run this program, but anything u
 </p>
  
 # Change Log
+**Version 1.3.3 - Version 1.4.1**
+* Improved the downloading requests definition in the requests.py file.
+* Added new downloading methods to requests.py file to seperate and breakdown the logic.
+* Implemented a new clive webhook into the program for another high traffic clive form.
+* Added tabs to the program to allow users to swap back a forth between two different clive webhooks.
+
 **Version 1.3.2**
 * Improved the downloading requests definition in the requests.py file.
 * Added a new dict option in the abbreviation definition in the dictionaries.py file.
@@ -105,6 +111,9 @@ A Python 3.9 environment was used to create and run this program, but anything u
  
  ## Reported/Known Bugs
  All reported bugs may be caused from similar instead of seperate instances.
+ 
+ **Version 1.3.2**
+ * Program didn't recongize "Residency Verification Form" submissions and broke when trying to pull from a singler department.
  
  **Version 1.2**
  * Program may still become temporarily frozen when downloading a large sum of files at once.
