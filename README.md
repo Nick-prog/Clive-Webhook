@@ -8,6 +8,8 @@
    </p>
 </p>
 
+**THIS PROJECT HAS BEEN DISCOUNTIED. PLEASE REFER TO THE IMPROVED-CLIVE-WEBHOOK REPOSITORY FOR THE LATEST VERSION.**
+
 # Clive-Wehbook
 The main purpose of this program was to utilize a webhook connection on an online form that has a high amount of traffic on a daily basis. 
 
