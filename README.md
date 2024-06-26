@@ -29,12 +29,12 @@ All requirements to run the following program can be found in requirements.txt f
     ```sh
     git clone https://github.com/your_username/Project-Name.git
     ```
- 2. Now that you have the files on your machine, replace all _source..._ and _authroization_ values within the __init__.py file. Your _authorization_ value can be found in the settings of your account with Pipedream, without it you will be unable to interact with the webhook link so keep it SAFE. Your _source..._ representes what source you would like to access within your Pipedream account. After you create a source and specify webhook as the type, it should be displayed on the page's url and should start with "dc_...".
+ 2. Now that you have the files on your machine, replace all _source..._ and _authroization_ values within the .env file. Your AUTH_KEY value can be found in the settings of your account with Pipedream, without it you will be unable to interact with the webhook link so keep it SAFE. Your specific source keys represent what webhook you would like to access within your Pipedream account. After you create a source and specify webhook as the type, it should be displayed on the page's url and should start with something like "dc_...". Must change the pipedream.py file to represent your designated sources and .env keys.
  3. Finally, execute the main.py file and your program should run after a short period.
  
- The initial pop-up dialog box allows users to input the amount of hours they wish to run the program. Inputting anything other than a number >= 1 will result in an error. To run the program for a sample run, input 1 for a quick enter and exit. To achieve hourly pulls after inputting a number higher than 1, the user must leave their computer running while the program works in the background.
+The initial pop-up dialog box allows users to input the amount of hours they wish to run the program. Inputting anything other than a number >= 1 will result in an error. To run the program for a sample run, input 1 for a quick enter and exit. To achieve hourly pulls after inputting a number higher than 1, the user must leave their computer running while the program works in the background.
 
- **Disclaimer: This program was made SPECIFICALLY for this exact problem. Unless the JSON Snippet metadata genearted for your problem is exactly the same, you must alter most if not all of the code.**
+ **Disclaimer: This program was made SPECIFICALLY for this exact problem. Unless the JSON Snippet metadata genearted for your problem is exactly the same, you must alter most if not all of the code found within the requests.py file.**
   
  <br />
   <p align="center">
