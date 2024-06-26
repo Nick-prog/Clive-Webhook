@@ -12,3 +12,4 @@ six==1.16.0
 wget==3.2
 wkhtmltopdf==0.2
 zope.interface==6.4.post2
+cx_Freeze==7.1.1
