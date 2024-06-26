@@ -35,7 +35,7 @@ base_options = {
     'install_requires': install_requires,
     'author': 'Nickolas Rodriguez',
     'author_email': 'Nickolas.ryan.rodriguez@outlook.com',
-    'description': 'An automated webhook program that parses metadata received from high-traffic Clive forms for the purpose of expediting TAMUK admissions.',
+    'description': 'Updated version of the previous improved Clive Webhook. Features a simpler start-up process and hourly pulls from Pipedream until designated timer is reached.',
     'url': 'https://github.com/Nick-prog/Clive-Webhook',
     'keywords': 'python, setuptools, cx_Freeze, installer, packaging',
     'classifiers': [
@@ -56,7 +56,7 @@ else:
 options = {
     'build_exe': {
         'packages': packages,
-        'include_files': '',  # Add any additional files/directories here if needed
+        'include_files': [('.env', '.env')],  # Add any additional files/directories here if needed
         'includes': ['Webhook'],       # Add any additional modules to include here
     },
     'package_data':{

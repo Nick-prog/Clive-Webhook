@@ -6,153 +6,132 @@ import os
 import ssl
 from datetime import datetime
 
-def total(method):
-    Data = Webhook.id(method)
-    dict = json.loads(Data)
-    list = dict["page_info"]
-    return list.get("total_count")
+class Request:
 
-def month_year():
-    month_year = datetime.now()
-    month_year_format = month_year.strftime("%B %Y")
-    return month_year_format #Returns the current month and year
+    def __init__(self, doc_type: int, path: str):
+        """Class created to host methods for file manipulation. Identifies student information,
+        downloads given file, and stores it based on unique 
 
-def today():
-    today = datetime.now()
-    today_format = today.strftime("%m.%d.%Y")
-    return today_format #Returns the current month/date/year
+        :param doc_type: _description_
+        :type doc_type: int
+        """
 
-def uploaded_documents():
-    Data = Webhook.get(method=1)
-    dict = json.loads(Data)
-    list = dict["data"]
+        self.doc_type = doc_type
+        self.path = path
 
-    if(len(list) != 0):
-        for total in range (len(list)):
-            if(list[total].get("event").get("method") == "POST" and list[total].get("event").get("body") != ""):
-                fieldValues = list[total].get("event").get("body").get("formSubmission").get("fieldValues") #Cycle through all 6 of the field values we acquire
-                name = str(fieldValues.get(Webhook.text("name_text"))).strip("[']")
-                mail = str(fieldValues.get(Webhook.text("mail_text"))).strip("[']")
-                applicant = str(fieldValues.get(Webhook.text("app_text"))).strip("[']")
-                description = str(fieldValues.get(Webhook.text("des_text"))).strip("[']")
-                upload = str(fieldValues.get(Webhook.text("up_text"))).strip("[']")
-                department = str(fieldValues.get(Webhook.text("dept_text"))).strip("[']")
-                path = "//fs16.tamuk.edu/ds$/Admissions/Documents for Imaging/Clive/%s/%s/%s" %(Webhook.month_year(), Webhook.today(), applicant.replace(" ", ""))
-                #path = "C:/Users/KUNRR004/Downloads/%s/%s/%s" %(Webhook.month_year(), Webhook.today(), applicant.replace(" ", ""))
-                Webhook.download(name, mail, applicant, description, upload, department, path, 1, "None", "None")
-                Webhook.store(total,method=1)
-            else:
-                Webhook.store(total,method=1)
-        Webhook.delete(method=1)
+    def get_total(self) -> int:
+        """Method to gets the total amount of entries in the given Pipedream target
 
-def fee_documents():
-    Data = Webhook.get(method=2)
-    dict = json.loads(Data)
-    list = dict["data"]
+        :return: number of entries found
+        :rtype: int
+        """
+
+        pd = Webhook.Pipedream(self.doc_type)
+        metadata = pd.get_events()
+        ids = json.loads(metadata)
+        return ids["page_info"]["total_count"]
     
-    if(len(list) != 0):
-        for total in range (len(list)):
-            if(list[total].get("event").get("method") == "POST" and list[total].get("event").get("body") != ""):
-                fieldValues = list[total].get("event").get("body").get("formSubmission").get("fieldValues") #Cycle through all 6 of the field values we acquire
-                mail = str(fieldValues.get(Webhook.text2("mail_text"))).strip("[']")
-                applicant = str(fieldValues.get(Webhook.text2("app_text"))).strip("[']")
-                upload = str(fieldValues.get(Webhook.text2("up_text"))).strip("[']")
-                first = str(fieldValues.get(Webhook.text2("first_text"))).strip("[']")
-                last = str(fieldValues.get(Webhook.text2("last_text"))).strip("[']")
-                path = "//fs16.tamuk.edu/ds$/Admissions/Documents for Imaging/Clive/%s/%s/%s" %(Webhook.month_year(), Webhook.today(), applicant.replace(" ", ""))
-                #path = "C:/Users/KUNRR004/Downloads/%s/%s/%s" %(Webhook.month_year(), Webhook.today(), applicant.replace(" ", ""))
-                Webhook.download("None", mail, applicant, "None", upload, "None", path, 2, first, last)
-                Webhook.store(total,method=2)
-            else:
-                Webhook.store(total,method=2)
-        Webhook.delete(method=2)
+    def get_date(self, select: int) -> str:
+        """Method to get the current date and formats it based on selected value
 
-def download(name, mail, applicant, description, upload, department, path, method, first, last):
-    url = str(upload).replace("\\", "/")
-    filename = path + "/" + os.path.basename(url) #Acquire the filename
+        :param select: format selector
+        :type select: int
+        :raises ValueError: one of the two formatters wasn't selected
+        :return: formatted date string
+        :rtype: str
+        """
 
-    if not os.path.exists(path): #Does a folder currently exist for this student?
-        os.makedirs(path) #If not, create one...
-        option = os.path.exists(filename)
-        download_sent_file(url, path, applicant, description, option, method) #Downloads the user's sent file
-        download_info_file(path, applicant, name, mail, department, first, last, method) #Creates a txt file based on the user's information
-    else: #Else store the file in the student's folder
-        option = os.path.exists(filename)
-        download_sent_file(url, path, applicant, description, option, method)
-        download_info_file(path, applicant, name, mail, department, first, last, method)
+        date = datetime.now()
 
-def download_sent_file(url, path, applicant, description, option, method):
-    index = 0
-    ssl._create_default_https_context = ssl._create_unverified_context
+        if select == 1:
+            return date.strftime("%B %Y")
+        elif select == 2:
+            return date.strftime("%m.%d.%Y")
+    
+    def parse_metadata(self) -> None:
+        """Method that gets the documents sent through the designated Pipedream target and passes them to the download_doc method.
+        """
 
-    doc = wget.download(url, path)
-    old_file = os.path.join(path, doc)
-    ext = os.path.splitext(doc)
+        pd = Webhook.Pipedream(self.doc_type)
+        data = pd.get_data()
+        object = json.loads(data)
+        metadata = object["data"]
 
-    #Upload Documents Webhook download method
-    if(option == False and method == 1): #File doesn't exist yet in the given folder?
-        if(ext == ""):#File has special characters preventing proper capturing of the extension
-            new_file = os.path.join(path, applicant + "_" + Webhook.abbrevations(description))
-            while(os.path.exists(new_file) == True): #File now exists...
-                new_file = os.path.join(path, applicant + "_" + Webhook.abbrevations(description) + Webhook.exists(index))
-                index += 1
-        else:
-            new_file = os.path.join(path, applicant + "_" + Webhook.abbrevations(description) + ext[1])
-            while(os.path.exists(new_file) == True): #File now exists...
-                new_file = os.path.join(path, applicant + "_" + Webhook.abbrevations(description) + Webhook.exists(index) + ext[1])
-                index += 1
-    elif(option == True and method == 1):#File does exist in the given folder?
-        if(ext == ""):#File has special characters preventing proper capturing of the extension
-            new_file = os.path.join(path, applicant + "_" + Webhook.abbrevations(description))
-            while(os.path.exists(new_file) == True): #Need to index beforehand to prevent crashing
-                index += 1
-                new_file = os.path.join(path, applicant + "_" + Webhook.abbrevations(description) + Webhook.exists(index))
-        else:
-            new_file = os.path.join(path, applicant + "_" + Webhook.abbrevations(description) + Webhook.exists(index) + ext[1])
-            while (os.path.exists(new_file) == True): #Need to index beforehand to prevent crashing
-                index +=1
-                new_file = os.path.join(path, applicant + "_" + Webhook.abbrevations(description) + Webhook.exists(index) + ext[1])
-
-    #Fee Waiver Request Webhook download method
-    elif(option == False and method == 2):#File doesn't exist yet in the given folder?
-        if(ext == ""):#File has special characters preventing proper capturing of the extension
-            new_file = os.path.join(path, applicant + "_AFWR")
-            while(os.path.exists(new_file) == True):#File now exists...
-                new_file = os.path.join(path, applicant + "_AFWR" + Webhook.exists(index))
-                index += 1
-        else:
-            new_file = os.path.join(path, applicant + "_AFWR" + ext[1])
-            while(os.path.exists(new_file) == True):#File now exists...
-                new_file = os.path.join(path, applicant + "_AFWR" + Webhook.exists(index) + ext[1])
-                index += 1
-    elif(option == True and method == 2):#File does exist in the given folder?
-        if(ext == ""):#File has special characters preventing proper capturing of the extension
-            new_file = os.path.join(path, applicant + "_AFWR" + Webhook.exists(index))
-            while (os.path.exists(new_file) == True):#Need to index beforehand to prevent crashing
-                index+=1
-                new_file = os.path.join(path, applicant + "_AFWR" + Webhook.exists(index))
-        else:
-            new_file = os.path.join(path, applicant + "_AFWR" + Webhook.exists(index) + ext[1])
-            while (os.path.exists(new_file) == True):#Need to index beforehand to prevent crashing
-                index+=1
-                new_file = os.path.join(path, applicant + "_AFWR" + Webhook.exists(index) + ext[1])
-
-    os.rename(old_file, new_file)
-
-def download_info_file(path, applicant, name, mail, department, first, last, method):
-    if(method == 1): #Uploaded documents clive info form
-        file_name = f"{path}" + "/" + f"{applicant}" + "_" + "info.txt"
-        file_info = open(file_name, "w")
-        file_info.write("Name: " + name + "\n"
-        + "Email: " + mail + "\n"
-        + "Applicant: " + applicant + "\n"
-        + "Department: " + department)
-    else: #Fee Waiver request clive info form
-        file_name = f"{path}" + "/" + f"{applicant}" + "_" + "info.txt"
-        file_info = open(file_name, "w")
-        file_info.write("First: " + first + "\n"
-        + "Last: " + last + "\n"
-        + "Email: " + mail + "\n"
-        + "Applicant: " + applicant + "\n")
+        if len(metadata) == 0:
+            return
         
-    file_info.close()
+        path = f"{self.path}/{self.get_date(1)}/{self.get_date(2)}"
+        
+        field_values = []
+        
+        for item in metadata:
+            if item["event"]["method"] == "POST" and item["event"]["body"] != "":
+                    _dict = {'Name': '', 
+                             'First Name': '', 
+                             'Last Name': '',
+                             'Applicant ID (K0012345)': '',
+                             'Describe the document(s) you are loading.': '',
+                             'Submit your document(s) to the following department:': '',
+                             'Upload your file(s)': '',
+                             'Fee Waiver Supportive Document': '',
+                             'Phone Number': '',
+                             'Email': ''
+                            }
+                    for value in item["event"]["body"]["formSubmission"]["fieldValues"]:
+                        _dict[value] = str(item["event"]["body"]["formSubmission"]["fieldValues"][value]).strip("[']")
+                    field_values.append(_dict)
+
+        for idx, item in enumerate(field_values):
+            full_path = os.path.abspath(os.path.join(path, f"{item['Applicant ID (K0012345)']}_{item['Name']}"))
+                
+            if not os.path.exists(full_path):
+                os.makedirs(full_path)
+
+            if item['Upload your file(s)'] == '':
+                item['Upload your file(s)'] = item['Fee Waiver Supportive Document']
+            
+            if item['Name'] == '':
+                item['Name'] = f"{item['First Name']} {item['Last Name']}"
+
+            if item['Describe the document(s) you are loading.'] == '':
+                item['Describe the document(s) you are loading.'] = "App Fee Waiver"
+
+            self.download_uploaded_files(item['Upload your file(s)'], 
+                                        item['Applicant ID (K0012345)'], 
+                                        item['Describe the document(s) you are loading.'], 
+                                        full_path)
+            
+            self.create_info_file(full_path, 
+                                  item['Applicant ID (K0012345)'],
+                                  item['Name'],
+                                  item['Email'], 
+                                  item['Submit your document(s) to the following department:'],)
+            
+            pd.store_data(idx)
+                    
+        pd.delete_data()
+
+    def download_uploaded_files(self, upload: str, applicant_id: str, description: str, full_path: str) -> None:
+
+        ssl._create_default_https_context = ssl._create_unverified_context
+        doc = wget.download(upload, full_path)
+        doc_components = os.path.splitext(doc)
+
+        total = 1
+        d = Webhook.Definitions(description)
+        file = os.path.abspath(os.path.join((full_path), f'{applicant_id}_{d.description}{total}{doc_components[1]}'))
+
+        while os.path.exists(file):
+            total += 1
+            file = os.path.abspath(os.path.join((full_path), f'{applicant_id}_{d.description}{total}{doc_components[1]}'))
+
+        os.rename(doc, file)
+
+    def create_info_file(self, full_path: str, applicant_id: str, name: str, email: str, department: str) -> None:
+
+        with open(f"{full_path}" + "/" + f"{applicant_id}" + "_" + "info.txt", "w") as file:
+            file.write("Name: " + name + "\n" 
+                       + "Email: " + email + "\n"
+                        + "Applicant: " + applicant_id + "\n" 
+                        + "Department: " + department)
+            file.close()
