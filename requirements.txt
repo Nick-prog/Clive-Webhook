@@ -1,15 +1,5 @@
-DateTime==5.5
 http-client==0.1.22
-numpy==2.0.0
 pdfkit==1.0.0
-pycurl==7.45.3
-PyQt5==5.15.10
-PyQt5-Qt5==5.15.2
-PyQt5-sip==12.13.0
-pyqtgraph==0.13.7
-pytz==2024.1
-six==1.16.0
 wget==3.2
 wkhtmltopdf==0.2
-zope.interface==6.4.post2
 cx_Freeze==7.1.1

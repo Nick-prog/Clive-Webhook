@@ -22,13 +22,14 @@ def abbrevations(x): #Dictionary for the different options in "Describe the docu
         "Passport": "PASS",
         "Personal Statement": "PERS",
         "Proof of Dependency/Vital Records": "VETA-VITAL_RECORDS",
-        "PTE Scores": "UPET",
-        "Residency Alien Card": "RACD",
+        "PTE Scores": "PTEU",
+        "Resident Alien Card": "RACD",
         "Residency Verification Form": "RSVF",
         "Resume": "RSME",
         "SAT or ACT Scores": "TSTS",
         "Statement of Purpose": "STMT",
         "Secondary School Transcript": "SCTR",
+        "Transcripts": "UCT",
         "TX Hazelwood Act Continued Enrollment Form": "VETA-CONT_ENROLMNT",
         "TX Hazelwood Act Exemption App": "VETA-HZLWED-EXEMPT",
         "TOEFL Scores": "UTFL",
@@ -51,12 +52,13 @@ def departments(x): #Dictionary for the different option in "Submit your documen
 
 def text(x): #Dictionary to shorten the categories present on the Upload Documents Clive form
     dict = {
+        "mail_text": "Email",
+        "name_text": "Name",
         "app_text": "Applicant ID (K0012345)",
         "des_text": "Describe the document(s) you are loading.",
+        #"up_text": "No file chosen",
         "up_text": "Upload your file(s)",
         "dept_text": "Submit your document(s) to the following department:",
-        "mail_text": "Email",
-        "name_text": "Name"
     }
     return dict[x]
 
@@ -68,26 +70,6 @@ def text2(x): #Dictionary to shorten the categories present on the Fee Waiver Re
         "mail_text": "Email",
         "up_text": "Fee Waiver Supportive Document",
         "app_text": "Applicant ID (K0012345)"
-    }
-    return dict[x]
-
-def table_vertical(x): #Dictonary for the rows present in the Real Time Table Information on the GUI
-    dict = {
-        0 : "-1-",
-        1 : "-2-",
-        2 : "-3-",
-        3 : "-4-",
-        4 : "-5-",
-        5 : "-6-",
-    }
-    return dict[x]
-
-def table_horizontal(x): #Dictonary for the columns present in the Real Time Table Information on the GUI
-    dict = {
-        0 : "Entries",
-        1 : "Date",
-        2 : "Time",
-        3 : "Last",
     }
     return dict[x]
 
