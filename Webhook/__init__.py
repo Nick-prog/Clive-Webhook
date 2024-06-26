@@ -4,5 +4,5 @@ from .requests import *
 from .interface import *
 from .dictionaries import *
 
-__version__ = "1.4.1"
-__title__ = "Clive-1.4.1"
+__version__ = "1.0"
+__author__ = "Nickolas Rodriguez"
