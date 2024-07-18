@@ -35,6 +35,7 @@ def run(select: int) -> int:
     try:
         path = find_initial_dir()
         w = Webhook.Request(select, path)
+        print(w.metadata)
         total = total + w.get_total()
         w.parse_metadata()
 

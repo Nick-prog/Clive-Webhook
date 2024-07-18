@@ -18,6 +18,7 @@ class Request:
 
         self.doc_type = doc_type
         self.path = path
+        self.metadata = []
 
     def get_total(self) -> int:
         """Method to gets the total amount of entries in the given Pipedream target
@@ -109,6 +110,7 @@ class Request:
             
             pd.store_data(idx)
                     
+        self.metadata.append(field_values)
         pd.delete_data()
 
     def download_uploaded_files(self, upload: str, applicant_id: str, description: str, full_path: str) -> None:
