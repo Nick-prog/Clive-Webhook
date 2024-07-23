@@ -28,16 +28,18 @@ def run(select: int) -> int:
     """
 
     if select > 3:
-        raise ValueError('No Webhook repo associated with that number.')
+        raise ValueError('No Webhook source associated with that number.')
 
     total = 0
 
     try:
         path = find_initial_dir()
         w = Webhook.Request(select, path)
-        print(w.metadata)
         total = total + w.get_total()
         w.parse_metadata()
+
+        x = Webhook.CSV(w.metadata, path)
+        x.create_csv(select)
 
         return total
     except BaseException:
@@ -59,8 +61,15 @@ if __name__ == "__main__":
         time_cycles += 1
 
         try:
-            upload_total += run(1)
-            fee_total += run(2)
+            upload = run(1)
+            fee = run(2)
+
+            if upload != 0:
+                upload_total += upload
+            
+            if fee != 0:
+                fee_total += fee
+
         except BaseException as b:
             ctypes.windll.user32.MessageBoxW(0, f"__main__ error encountered at runtime. \n{sys.exc_info()[0]}, {sys.exc_info()[1]}", "Warning!", 16)
             error_flag = 1

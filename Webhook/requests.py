@@ -109,8 +109,8 @@ class Request:
                                   item['Submit your document(s) to the following department:'],)
             
             pd.store_data(idx)
-                    
-        self.metadata.append(field_values)
+            self.metadata.append(field_values)
+
         pd.delete_data()
 
     def download_uploaded_files(self, upload: str, applicant_id: str, description: str, full_path: str) -> None:
