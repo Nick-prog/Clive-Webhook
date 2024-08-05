@@ -2,7 +2,6 @@ import Webhook
 import time
 import os
 import sys
-import ctypes
 import pymsgbox
 from pathlib import Path
 
@@ -43,7 +42,7 @@ def run(select: int) -> int:
 
         return total
     except BaseException:
-        ctypes.windll.user32.MessageBoxW(0, f"run() error encountered at ({select}). \n{sys.exc_info()}", "Warning!", 16)
+        pymsgbox.alert(f"run() error encountered at ({select}). \n{sys.exc_info()}", "Warning!")
 
 if __name__ == "__main__":
 
@@ -71,7 +70,7 @@ if __name__ == "__main__":
                 fee_total += fee
 
         except BaseException as b:
-            ctypes.windll.user32.MessageBoxW(0, f"__main__ error encountered at runtime. \n{sys.exc_info()[0]}, {sys.exc_info()[1]}", "Warning!", 16)
+            pymsgbox.alert(f"__main__ error encountered at runtime. \n{sys.exc_info()[0]}, {sys.exc_info()[1]}", "Warning!")
             error_flag = 1
         
         if int(value) != 1:
