@@ -4,7 +4,12 @@ import wget
 import os.path
 import os
 import ssl
+import sys
+import pymsgbox
 from datetime import datetime
+from docx2pdf import convert
+from time import sleep
+from tqdm import tqdm
 
 class Request:
 
@@ -79,14 +84,19 @@ class Request:
                              'Email': ''
                             }
                     for value in item["event"]["body"]["formSubmission"]["fieldValues"]:
-                        _dict[value] = str(item["event"]["body"]["formSubmission"]["fieldValues"][value]).strip("[']")
+                        _dict[value] = str(item["event"]["body"]["formSubmission"]["fieldValues"][value]).strip("[']").replace("'", "").replace('"', '')
                     field_values.append(_dict)
 
-        for idx, item in enumerate(field_values):
-            full_path = os.path.abspath(os.path.join(path, f"{item['Applicant ID (K0012345)']}_{item['Name']}"))
-                
-            if not os.path.exists(full_path):
-                os.makedirs(full_path)
+        for idx, item in tqdm(enumerate(field_values)):
+
+            try: 
+                full_path = os.path.abspath(os.path.join(path, f"{item['Applicant ID (K0012345)']}_{item['Name']}"))
+                    
+                if not os.path.exists(full_path):
+                    os.makedirs(full_path)
+            except BaseException as b:
+                print(f"{full_path} is not a possible directory. \n{sys.exc_info[0]}\n{sys.exc_info[1]}")
+                pymsgbox.alert(f"{full_path} is not a possible directory. \n{sys.exc_info[0]}\n{sys.exc_info[1]}", "Warning!")
 
             if item['Upload your file(s)'] == '':
                 item['Upload your file(s)'] = item['Fee Waiver Supportive Document']
@@ -96,11 +106,15 @@ class Request:
 
             if item['Describe the document(s) you are loading.'] == '':
                 item['Describe the document(s) you are loading.'] = "App Fee Waiver"
-
-            self.download_uploaded_files(item['Upload your file(s)'], 
-                                        item['Applicant ID (K0012345)'], 
-                                        item['Describe the document(s) you are loading.'], 
-                                        full_path)
+            
+            try: 
+                self.download_uploaded_files(item['Upload your file(s)'], 
+                                            item['Applicant ID (K0012345)'], 
+                                            item['Describe the document(s) you are loading.'], 
+                                            full_path, idx)
+            except BaseException as b:
+                print(f"Download went wrong, please review {item['Upload your file(s)']} \n{sys.exc_info[0]}\n{sys.exc_info[1]}")
+                pymsgbox.alert(f"Download went wrong, please review {item['Upload your file(s)']} \n{sys.exc_info[0]}\n{sys.exc_info[1]}", "Warning!")
             
             self.create_info_file(full_path, 
                                   item['Applicant ID (K0012345)'],
@@ -110,24 +124,31 @@ class Request:
             
             pd.store_data(idx)
             self.metadata.append(field_values)
+            sleep(1)
 
         pd.delete_data()
 
-    def download_uploaded_files(self, upload: str, applicant_id: str, description: str, full_path: str) -> None:
+    def download_uploaded_files(self, upload: str, applicant_id: str, description: str, full_path: str, idx: int) -> None:
+        try:
+            ssl._create_default_https_context = ssl._create_unverified_context
+            doc = wget.download(upload, full_path)
+            doc_components = os.path.splitext(doc)
 
-        ssl._create_default_https_context = ssl._create_unverified_context
-        doc = wget.download(upload, full_path)
-        doc_components = os.path.splitext(doc)
-
-        total = 1
-        d = Webhook.Definitions(description)
-        file = os.path.abspath(os.path.join((full_path), f'{applicant_id}_{d.description}{total}{doc_components[1]}'))
-
-        while os.path.exists(file):
-            total += 1
+            total = 1
+            d = Webhook.Definitions(description)
             file = os.path.abspath(os.path.join((full_path), f'{applicant_id}_{d.description}{total}{doc_components[1]}'))
 
-        os.rename(doc, file)
+            while os.path.exists(file):
+                total += 1
+                file = os.path.abspath(os.path.join((full_path), f'{applicant_id}_{d.description}{total}{doc_components[1]}'))
+
+            os.rename(doc, file)
+            if doc_components[1] == '.docx':
+                pdf_file = os.path.abspath(os.path.join((full_path), f'{applicant_id}_{d.description}{total}.pdf'))
+                convert(file, pdf_file)
+        except BaseException as B:
+            print(f"download_uploaded_file() error at {idx}: <{applicant_id}, {description}, {upload}>. \n{sys.exc_info()}")
+            pymsgbox.alert(f"download_uploaded_file() error at {idx}: <{applicant_id}, {description}, {upload}>. \n{sys.exc_info()}", "Warning!")
 
     def create_info_file(self, full_path: str, applicant_id: str, name: str, email: str, department: str) -> None:
 

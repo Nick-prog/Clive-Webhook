@@ -1,3 +1,4 @@
+import os
 import pandas as pd
 from csv import DictWriter
 from datetime import datetime
@@ -24,5 +25,6 @@ class CSV:
 
             with open(filepath, 'a', newline='') as outfile:
                 writer = DictWriter(outfile, tuple(headers))
-                writer.writeheader()
+                if os.path.exists(filepath):
+                    writer.writeheader()
                 writer.writerows(self.metadata[select-1])

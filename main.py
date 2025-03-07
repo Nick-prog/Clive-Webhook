@@ -46,10 +46,7 @@ def run(select: int) -> int:
 
 if __name__ == "__main__":
 
-    error_flag = 0
-    time_cycles = 0
-    upload_total = 0
-    fee_total = 0
+    error_flag = time_cycles = upload_total = fee_total = 0
 
     value = pymsgbox.prompt('How many hours should the program run?', 'Input Dialog Box')
 
