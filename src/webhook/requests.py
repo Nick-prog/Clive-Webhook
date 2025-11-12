@@ -1,4 +1,3 @@
-import Webhook
 import json
 import wget
 import os.path
@@ -14,7 +13,8 @@ from time import sleep
 from tqdm import tqdm
 from typing import Any
 
-from Webhook.logger import logger
+from src.webhook.logger import logger
+from src.tools.dictionaries import Definitions
 
 
 def convert(src: str, dst: str) -> bool:
@@ -61,7 +61,8 @@ class Request:
         :rtype: int
         """
 
-        pd = Webhook.Pipedream(self.doc_type)
+        from src.webhook.pipedream import Pipedream
+        pd = Pipedream(self.doc_type)
         metadata = pd.get_events()
         ids: dict[str, Any] = json.loads(str(metadata))
         return ids["page_info"]["total_count"]
@@ -89,7 +90,8 @@ class Request:
         """Method that gets the documents sent through the designated Pipedream target and passes them to the download_doc method.
         """
 
-        pd = Webhook.Pipedream(self.doc_type)
+        from src.webhook.pipedream import Pipedream
+        pd = Pipedream(self.doc_type)
         data = pd.get_data()
         object: dict[str, Any] = json.loads(str(data))
         metadata = object["data"]
@@ -176,7 +178,7 @@ class Request:
             doc_components = os.path.splitext(doc)
 
             total = 1
-            d = Webhook.Definitions(description)
+            d = Definitions(description)
             file = os.path.abspath(os.path.join((full_path), f'{applicant_id}_{d.description}{total}{doc_components[1]}'))
 
             while os.path.exists(file):
