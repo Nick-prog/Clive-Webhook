@@ -1,4 +1,5 @@
-import Webhook
+from src.webhook.requests import Request
+from src.tools.csv import CSV
 import time
 import os
 import sys
@@ -39,13 +40,13 @@ def run(select: int) -> Tuple[int, int]:
 
     try:
         path = find_initial_dir()
-        w = Webhook.Request(select, path)
+        w = Request(select, path)
 
         # Use the actual number of entries parsed (parse_metadata now returns count)
         processed = w.parse_metadata()
         events_processed = int(processed)
 
-        x = Webhook.CSV(w.metadata, path)
+        x = CSV(w.metadata, path)
         x.create_csv(select)
 
         # Count files created during this parse run
@@ -97,8 +98,8 @@ if __name__ == "__main__":
     except Exception as e:
         try:
             # prefer package logger if available
-            from Webhook import logger as _logger
-            _logger.logger.exception("Fatal error in main: %s", e)
+            from src.webhook.logger import logger
+            logger.exception("Fatal error in main: %s", e)
         except Exception:
             import traceback
             traceback.print_exc()
