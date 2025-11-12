@@ -1,2 +1,4 @@
-# Shim to keep backward compatibility after moving code to src/
-from src.webhook.pipedream import *  # noqa: F401,F403
+import importlib, sys
+_mod = importlib.import_module('src.webhook.pipedream')
+sys.modules[__name__] = _mod
+
