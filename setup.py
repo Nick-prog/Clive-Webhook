@@ -27,6 +27,10 @@ packages = find_packages(exclude=['tests'])
 # Read requirements
 install_requires = parse_requirements(os.path.join(current_dir, 'requirements.txt'))
 
+# Add macOS-specific requirements
+if sys.platform == 'darwin':
+    install_requires.append('appscript==1.4.0')
+
 # Define base setup options
 base_options = {
     'name': 'Webhook',

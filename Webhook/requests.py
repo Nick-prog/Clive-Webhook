@@ -10,6 +10,7 @@ from datetime import datetime
 from docx2pdf import convert
 from time import sleep
 from tqdm import tqdm
+from typing import Any
 
 class Request:
 
@@ -34,7 +35,7 @@ class Request:
 
         pd = Webhook.Pipedream(self.doc_type)
         metadata = pd.get_events()
-        ids = json.loads(metadata)
+        ids: dict[str, Any] = json.loads(str(metadata))
         return ids["page_info"]["total_count"]
     
     def get_date(self, select: int) -> str:
@@ -53,6 +54,8 @@ class Request:
             return date.strftime("%B %Y")
         elif select == 2:
             return date.strftime("%m.%d.%Y")
+        else:
+            return date.strftime("%B %Y")
     
     def parse_metadata(self) -> None:
         """Method that gets the documents sent through the designated Pipedream target and passes them to the download_doc method.
@@ -60,7 +63,7 @@ class Request:
 
         pd = Webhook.Pipedream(self.doc_type)
         data = pd.get_data()
-        object = json.loads(data)
+        object: dict[str, Any] = json.loads(str(data))
         metadata = object["data"]
 
         if len(metadata) == 0:
@@ -95,8 +98,8 @@ class Request:
                 if not os.path.exists(full_path):
                     os.makedirs(full_path)
             except BaseException as b:
-                print(f"{full_path} is not a possible directory. \n{sys.exc_info[0]}\n{sys.exc_info[1]}")
-                pymsgbox.alert(f"{full_path} is not a possible directory. \n{sys.exc_info[0]}\n{sys.exc_info[1]}", "Warning!")
+                print(f"{full_path} is not a possible directory. \n{sys.exc_info()[0]}\n{sys.exc_info()[1]}")
+                pymsgbox.alert(f"{full_path} is not a possible directory. \n{sys.exc_info()[0]}\n{sys.exc_info()[1]}", "Warning!")
 
             if item['Upload your file(s)'] == '':
                 item['Upload your file(s)'] = item['Fee Waiver Supportive Document']
@@ -113,8 +116,8 @@ class Request:
                                             item['Describe the document(s) you are loading.'], 
                                             full_path, idx)
             except BaseException as b:
-                print(f"Download went wrong, please review {item['Upload your file(s)']} \n{sys.exc_info[0]}\n{sys.exc_info[1]}")
-                pymsgbox.alert(f"Download went wrong, please review {item['Upload your file(s)']} \n{sys.exc_info[0]}\n{sys.exc_info[1]}", "Warning!")
+                print(f"Download went wrong, please review {item['Upload your file(s)']} \n{sys.exc_info()[0]}\n{sys.exc_info()[1]}")
+                pymsgbox.alert(f"Download went wrong, please review {item['Upload your file(s)']} \n{sys.exc_info()[0]}\n{sys.exc_info()[1]}", "Warning!")
             
             self.create_info_file(full_path, 
                                   item['Applicant ID (K0012345)'],
